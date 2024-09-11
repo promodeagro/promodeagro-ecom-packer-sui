@@ -1,0 +1,543 @@
+{
+    "success": true,
+    "message": "",
+    "data": {
+   "product_details":{
+"product_name":"Nuerovite plus",
+"customer_name":"Shiv",
+"product_code":"DERTGFGTRF80C"
+   },
+   "order_fullfilment-details":{
+    "list":[ 
+        
+    {
+        "id": 1,
+        "lot_number": "L221024-1",
+        "order_id": "FN22332234",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "500 bottles",
+        "delivery_date": "April 15, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 2,
+        "lot_number": "L221024-2",
+        "order_id": "FN22332235",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "510 bottles",
+        "delivery_date": "April 16, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 3,
+        "lot_number": "L221024-3",
+        "order_id": "FN22332236",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "520 bottles",
+        "delivery_date": "April 17, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 4,
+        "lot_number": "L221024-4",
+        "order_id": "FN22332237",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "530 bottles",
+        "delivery_date": "April 18, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 5,
+        "lot_number": "L221024-5",
+        "order_id": "FN22332238",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "540 bottles",
+        "delivery_date": "April 19, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 6,
+        "lot_number": "L221024-6",
+        "order_id": "FN22332239",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "550 bottles",
+        "delivery_date": "April 20, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 7,
+        "lot_number": "L221024-7",
+        "order_id": "FN22332240",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "560 bottles",
+        "delivery_date": "April 21, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 8,
+        "lot_number": "L221024-8",
+        "order_id": "FN22332241",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "570 bottles",
+        "delivery_date": "April 22, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 9,
+        "lot_number": "L221024-9",
+        "order_id": "FN22332242",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "580 bottles",
+        "delivery_date": "April 23, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 10,
+        "lot_number": "L221024-10",
+        "order_id": "FN22332243",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "590 bottles",
+        "delivery_date": "April 24, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },   {
+        "id": 11,
+        "lot_number": "L221024-11",
+        "order_id": "FN22332244",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "600 bottles",
+        "delivery_date": "April 25, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 12,
+        "lot_number": "L221024-12",
+        "order_id": "FN22332245",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "610 bottles",
+        "delivery_date": "April 26, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 13,
+        "lot_number": "L221024-13",
+        "order_id": "FN22332246",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "620 bottles",
+        "delivery_date": "April 27, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 14,
+        "lot_number": "L221024-14",
+        "order_id": "FN22332247",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "630 bottles",
+        "delivery_date": "April 28, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 15,
+        "lot_number": "L221024-15",
+        "order_id": "FN22332248",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "640 bottles",
+        "delivery_date": "April 29, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    }, {
+        "id": 16,
+        "lot_number": "L221024-16",
+        "order_id": "FN22332249",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "650 bottles",
+        "delivery_date": "April 30, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 17,
+        "lot_number": "L221024-17",
+        "order_id": "FN22332250",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "660 bottles",
+        "delivery_date": "May 1, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 18,
+        "lot_number": "L221024-18",
+        "order_id": "FN22332251",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "670 bottles",
+        "delivery_date": "May 2, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 19,
+        "lot_number": "L221024-19",
+        "order_id": "FN22332252",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "680 bottles",
+        "delivery_date": "May 3, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 20,
+        "lot_number": "L221024-20",
+        "order_id": "FN22332253",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "690 bottles",
+        "delivery_date": "May 4, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+
+
+    
+    
+    {
+        "id": 21,
+        "lot_number": "L221024-1",
+        "order_id": "FN22332234",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "500 bottles",
+        "delivery_date": "April 15, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 22,
+        "lot_number": "L221024-2",
+        "order_id": "FN22332235",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "510 bottles",
+        "delivery_date": "April 16, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 23,
+        "lot_number": "L221024-3",
+        "order_id": "FN22332236",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "520 bottles",
+        "delivery_date": "April 17, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 24,
+        "lot_number": "L221024-4",
+        "order_id": "FN22332237",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "530 bottles",
+        "delivery_date": "April 18, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 25,
+        "lot_number": "L221024-5",
+        "order_id": "FN22332238",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "540 bottles",
+        "delivery_date": "April 19, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 26,
+        "lot_number": "L221024-6",
+        "order_id": "FN22332239",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "550 bottles",
+        "delivery_date": "April 20, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 27,
+        "lot_number": "L221024-7",
+        "order_id": "FN22332240",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "560 bottles",
+        "delivery_date": "April 21, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 28,
+        "lot_number": "L221024-8",
+        "order_id": "FN22332241",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "570 bottles",
+        "delivery_date": "April 22, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 29,
+        "lot_number": "L221024-9",
+        "order_id": "FN22332242",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "580 bottles",
+        "delivery_date": "April 23, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 30,
+        "lot_number": "L221024-10",
+        "order_id": "FN22332243",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "590 bottles",
+        "delivery_date": "April 24, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },   {
+        "id": 31,
+        "lot_number": "L221024-11",
+        "order_id": "FN22332244",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "600 bottles",
+        "delivery_date": "April 25, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 32,
+        "lot_number": "L221024-12",
+        "order_id": "FN22332245",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "610 bottles",
+        "delivery_date": "April 26, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 33,
+        "lot_number": "L221024-13",
+        "order_id": "FN22332246",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "620 bottles",
+        "delivery_date": "April 27, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 34,
+        "lot_number": "L221024-14",
+        "order_id": "FN22332247",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "630 bottles",
+        "delivery_date": "April 28, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 35,
+        "lot_number": "L221024-15",
+        "order_id": "FN22332248",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "640 bottles",
+        "delivery_date": "April 29, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    }, {
+        "id": 36,
+        "lot_number": "L221024-16",
+        "order_id": "FN22332249",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "650 bottles",
+        "delivery_date": "April 30, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 37,
+        "lot_number": "L221024-17",
+        "order_id": "FN22332250",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "660 bottles",
+        "delivery_date": "May 1, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 38,
+        "lot_number": "L221024-18",
+        "order_id": "FN22332251",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "670 bottles",
+        "delivery_date": "May 2, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 39,
+        "lot_number": "L221024-19",
+        "order_id": "FN22332252",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "680 bottles",
+        "delivery_date": "May 3, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 40,
+        "lot_number": "L221024-20",
+        "order_id": "FN22332253",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "690 bottles",
+        "delivery_date": "May 4, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },
+    {
+        "id": 41,
+        "lot_number": "L221024-20",
+        "order_id": "FN22332253",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "690 bottles",
+        "delivery_date": "May 4, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },   {
+        "id": 42,
+        "lot_number": "L221024-20",
+        "order_id": "FN22332253",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "690 bottles",
+        "delivery_date": "May 4, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },   {
+        "id": 43,
+        "lot_number": "L221024-20",
+        "order_id": "FN22332253",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "690 bottles",
+        "delivery_date": "May 4, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },   {
+        "id": 44,
+        "lot_number": "L221024-20",
+        "order_id": "FN22332253",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "690 bottles",
+        "delivery_date": "May 4, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },   {
+        "id": 45,
+        "lot_number": "L221024-20",
+        "order_id": "FN22332253",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "690 bottles",
+        "delivery_date": "May 4, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },   {
+        "id": 46,
+        "lot_number": "L221024-20",
+        "order_id": "FN22332253",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "690 bottles",
+        "delivery_date": "May 4, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },   {
+        "id": 47,
+        "lot_number": "L221024-20",
+        "order_id": "FN22332253",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "690 bottles",
+        "delivery_date": "May 4, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },   {
+        "id": 48,
+        "lot_number": "L221024-20",
+        "order_id": "FN22332253",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "690 bottles",
+        "delivery_date": "May 4, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },   {
+        "id": 49,
+        "lot_number": "L221024-20",
+        "order_id": "FN22332253",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "690 bottles",
+        "delivery_date": "May 4, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },   {
+        "id": 50,
+        "lot_number": "L221024-20",
+        "order_id": "FN22332253",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "690 bottles",
+        "delivery_date": "May 4, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },   {
+        "id": 51,
+        "lot_number": "L221024-20",
+        "order_id": "FN22332253",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "690 bottles",
+        "delivery_date": "May 4, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },   {
+        "id": 52,
+        "lot_number": "L221024-20",
+        "order_id": "FN22332253",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "690 bottles",
+        "delivery_date": "May 4, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    },   {
+        "id": 53,
+        "lot_number": "L221024-20",
+        "order_id": "FN22332253",
+        "product_name": "Nuerovite Plus",
+        "quality_in_lots": "690 bottles",
+        "delivery_date": "May 4, 2024",
+        "delivery_location": "Main St, Suite 106, Irvine, CA 92614",
+        "status": "delivered"
+    }
+
+
+
+],
+    "totalPages": 6,
+    "currentPage": 1,
+    "pageSize": 10
+   }
+     
+   
+    }
+  }
+  
