@@ -1,0 +1,20 @@
+.purchase-order-container {
+    .purchase-order-tab-container {
+        .css-1h9z7r5-MuiButtonBase-root-MuiTab-root {
+            color: #1C1C1C;
+            opacity: 80%;
+            font-size: 14px;
+            line-height: 21px;
+            font-weight: 500;
+
+            &.Mui-selected {
+                color: #1C170D;
+                opacity: 100%;
+            }
+        }
+        .css-1aquho2-MuiTabs-indicator{
+background-color: #7F56D9;
+        }
+    }
+
+}

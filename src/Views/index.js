@@ -1,14 +1,24 @@
 import React, { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { PREFIX_APP_PATH, PREFIX_AUTH_PATH } from "./../Config/Config";
-import Dashboard from "./Postlogin/Dashboard";
+import Inventory from "./Postlogin/Inventory";
+import SalesAndReport from "./Postlogin/salesAndReport";
+import ContentManagement from "./Postlogin/ContentManagement";
+const Dashboards = lazy(() => import("./Postlogin/Dashboard"));
+const Customers = lazy(() => import("./Postlogin/Customers"));
+const AddNewCustomer = lazy(() =>
+  import("./Postlogin/Customers/AddNewCustomer")
+);
+const Products = lazy(() => import("./Postlogin/Products"));
 
-// const Dashboards = lazy(() => import("./Postlogin/Dashboard"));
 
 const PathNotFOund = lazy(() => import("./PathNotFound"));
 const Signin = lazy(() => import("./PreLogin/Signin"));
-const Signup = lazy(() => import("./PreLogin/Signup"));
+// const Signup = lazy(() => import("./PreLogin/Signup"));
 const ForgotPassword = lazy(() => import("./PreLogin/ForgotPassword"));
+const OtpVerification = lazy(() => import("./PreLogin/otpVerification"));
+const NewPassword = lazy(() => import("./PreLogin/newPassword"));
+
 const Views = () => {
   return (
     <>
@@ -17,32 +27,72 @@ const Views = () => {
           <Route
             exact
             path={`${PREFIX_APP_PATH}/dashboard`}
-            element={<Dashboard />}
+            element={<Dashboards />}
           />
-         
+        
+          <Route
+            exact
+            path={`${PREFIX_APP_PATH}/salesandreport`}
+            element={<SalesAndReport />}
+          />
+          <Route
+            exact
+            path={`${PREFIX_APP_PATH}/contentmanagement`}
+            element={<ContentManagement />}
+          />
+          <Route
+            exact
+            path={`${PREFIX_APP_PATH}/inventory`}
+            element={<Inventory />}
+          />
 
           <Route
+            exact
+            path={`${PREFIX_APP_PATH}/customers`}
+            element={<Customers />}
+          />
+          <Route
+            exact
+            path={`${PREFIX_APP_PATH}/add-new-customer`}
+            element={<AddNewCustomer />}
+          />
+          <Route
+            exact
+            path={`${PREFIX_APP_PATH}/products`}
+            element={<Products />}
+          />
+        
+
+<Route
             exact
             path={`${PREFIX_AUTH_PATH}/signin`}
             element={<Signin />}
           />
-          <Route
+          {/* <Route
             exact
             path={`${PREFIX_AUTH_PATH}/signup`}
             element={<Signup />}
-          />
+          /> */}
 
           <Route
             exact
             path={`${PREFIX_AUTH_PATH}/forgot-password`}
             element={<ForgotPassword />}
           />
+              <Route
+            exact
+            path={`${PREFIX_AUTH_PATH}/newpassword`}
+            element={<NewPassword />}
+          />
           <Route
             exact
             path="/app/inventory"
-            element={<Navigate to="/app/inventory/raw-materials" />}
+            element={<Navigate to="/app/inventory" />}
           />
           <Route exact path="/" element={<Navigate to="/app/dashboard" />} />
+        
+          
+
 
           <Route path="*" element={<PathNotFOund />} />
         </Routes>
