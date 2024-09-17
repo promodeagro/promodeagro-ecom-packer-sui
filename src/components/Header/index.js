@@ -1,7 +1,7 @@
 
 import { TopNavigation, Input } from '@cloudscape-design/components';
 import React from 'react';
-import logo from '../../assets/img/logo_PTR 1.png';
+import logo from '../../Assets/Images/PTRLogo.png';
 
 
 const TopBar = () => {
@@ -28,8 +28,8 @@ const TopBar = () => {
        
           {
             type: "menu-dropdown",
-            text: "xyz",
-            description: "shaisthasamreen786@gmail.com",
+            text: "Fatima Tabassum",
+            description: "fatimatabassum743@gmail.com",
             iconName: "user-profile",
             items: [
               { id: "profile", text: "Profile" },

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import vector from "../../Assets/Images/Vector.png"
 import PTRLogo from "../../Assets/Images/PTRLogo.png"
 import { Box,Button, Container, FormField, Input, SpaceBetween } from '@cloudscape-design/components'
-const ForgotPassword = () => {
+const CreateNewPassword = () => {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
 
@@ -18,8 +18,8 @@ const ForgotPassword = () => {
       <Container
       header={
           <SpaceBetween direction='vertical' alignItems='center'>
-        <Box variant='h1'>Forget Your Password</Box>
-        <Box textAlign='center'  variant='small'>Enter your email to proceed with the password reset. </Box>
+        <Box variant='h1'>Create New Password</Box>
+        <Box  variant='small'>Create a strong new password for your account.</Box>
       </SpaceBetween>
       }
       >
@@ -27,9 +27,12 @@ const ForgotPassword = () => {
             <FormField errorText="" label="Enter New Password">
               <Input value={password} onChange={(e)=> setPassword(e.detail.value)} type='password' placeholder='Enter New Password' />
             </FormField>
+            <FormField errorText="" label="Confirm Password">
+              <Input  value={confirmPassword} onChange={(e)=> setConfirmPassword(e.detail.value)} type='password'  placeholder='Confirm Password'/>
+            </FormField>
         
-            <Button  variant='primary' fullWidth>Send OTP</Button>
-            <Button variant='link' fullWidth>Or Login</Button>
+            <Button  variant='primary' fullWidth>Create Password</Button>
+            <Button variant='link' fullWidth>Cancel</Button>
           </SpaceBetween>
       </Container>
           </form>
@@ -37,4 +40,4 @@ const ForgotPassword = () => {
   )
 }
 
-export default ForgotPassword
+export default CreateNewPassword

@@ -4,8 +4,8 @@ import SideNavigation from "@cloudscape-design/components/side-navigation";
 import { Badge, Box } from "@cloudscape-design/components";
 
 const pages = [
-  { type: "link", text: "Home", href: "/app/dashboard" },
-  { type: "link", text: "Packed Orders", href: "/app/products" },
+  { type: "link", text: "Home", href: "/app/Home" },
+  { type: "link", text: "Packed Orders", href: "/app/Orders" },
   { type: "link", text: "Profile Details", href: "/app/inventory" },
   { type: "divider" },
   {

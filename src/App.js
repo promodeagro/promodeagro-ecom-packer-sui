@@ -4,7 +4,7 @@ import Header from "./components/Header";
 import Views from "./Views/index";
 import Sidebar from "components/Sidebar";
 import { AppLayout } from "@cloudscape-design/components";
-import PTRLogo from "../src/assets/img/PTRLogo.png";
+import PTRLogo from "../src/Assets/Images/PTRLogo.png";
 
 function App() {
   return (
