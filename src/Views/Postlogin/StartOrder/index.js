@@ -9,6 +9,7 @@ import {
   ContentLayout,
   BreadcrumbGroup,
   Modal,
+  StatusIndicator,
 } from "@cloudscape-design/components";
 import potatoImg from "../../../Assets/Images/Tomato.jpg";
 import tomatoImg from "../../../Assets/Images/Tomato.jpg";
@@ -251,9 +252,14 @@ const Customers = () => {
               visible={isModalVisible}
               onDismiss={() => setIsModalVisible(false)}
               closeAriaLabel="Close modal"
-              header="Success"
+              // header="Success"
             >
-              Successfully took image!
+              <div style={{color:"green"}}>
+                <h2>
+              Successfully Took Image
+              </h2>
+              <StatusIndicator type="success"></StatusIndicator>
+              </div>
             </Modal>
           </div>
         )}

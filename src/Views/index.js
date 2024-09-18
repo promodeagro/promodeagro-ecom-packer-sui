@@ -1,10 +1,12 @@
 import React, { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { PREFIX_APP_PATH, PREFIX_AUTH_PATH } from "./../Config/Config";
-import Inventory from "./Postlogin/Inventory";
+
 import SalesAndReport from "./Postlogin/salesAndReport";
 import OrderDetails from "./Postlogin/OrderDetails";
 import CreateNewPassword from "./PreLogin/CreateNewPassword";
+import  Notifications  from "./Postlogin/Notifications/index";
+import ProfileDetails from "./Postlogin/ProfileDetails";
 const Home = lazy(() => import("./Postlogin/Home"));
 const StartOrders = lazy(() => import("./Postlogin/StartOrder"));
 
@@ -27,7 +29,11 @@ const Views = () => {
             path={`${PREFIX_APP_PATH}/Home`}
             element={<Home />}
           />
-        
+         <Route
+            exact
+            path={`${PREFIX_APP_PATH}/notifications`}
+            element={<Notifications />}
+          />
           <Route
             exact
             path={`${PREFIX_APP_PATH}/salesandreport`}
@@ -40,8 +46,8 @@ const Views = () => {
           />
           <Route
             exact
-            path={`${PREFIX_APP_PATH}/inventory`}
-            element={<Inventory />}
+            path={`${PREFIX_APP_PATH}/ProfileDetails`}
+            element={<ProfileDetails/>}
           />
 
           <Route
@@ -90,8 +96,8 @@ const Views = () => {
           /> */}
           <Route
             exact
-            path="/app/inventory"
-            element={<Navigate to="/app/inventory" />}
+            path="/app/Home"
+            element={<Navigate to="/app/Home" />}
           />
           <Route exact path="/" element={<Navigate to="/app/auth/signin" />} />
         

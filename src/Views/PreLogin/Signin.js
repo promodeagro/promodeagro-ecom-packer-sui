@@ -32,7 +32,7 @@ const Signin = () => {
               <Input placeholder='Enter Your Password'/>
             </FormField>
            <span>
-            <Button variant='link'>Forget Password</Button>
+            <Button variant='link' onClick={navigate("/F")}>Forget Password</Button>
             </span>
             <Button variant='primary' fullWidth>Login</Button>
           </SpaceBetween>

@@ -6,8 +6,8 @@ const ProfileDetails = () => {
   const navigate = useNavigate();
 
   // have to change these value after getting api's 
-  const [username, setUsername] = useState("salmanbinmoosa")
-  const [email, setEmail] = useState("salmanbinmoosa@gmail.com")
+  const [username, setUsername] = useState("FatimaTabassum")
+  const [email, setEmail] = useState("FatimaTabassum@gmail.com")
   const [password, setPassword] = useState("")
   
   // handle form state
@@ -58,17 +58,21 @@ const ProfileDetails = () => {
               <Input onChange={(e)=> setPassword(e.detail.value)} value={password} type='password' placeholder='**********' />
             </FormField>
             {formEdit ? (
-          // If formEdit is true, render the "Update" button
+              <>
+          {/* // If formEdit is true, render the "Update" button */}
           <Button fullWidth variant='primary'>Update</Button>
-
+          <Button onClick={()=> setFormEdit(true)} fullWidth variant='inline-link'>Cancel</Button>
+          </>
         ) : (
           // If formEdit is false, render the "Edit" button
+          <>
           <Button fullWidth variant='primary'>Continue</Button>
-
+          <Button onClick={()=> setFormEdit(true)} fullWidth variant='inline-link' iconName='edit'> Edit</Button>
+          </>
         )}
             
-            <Button onClick={()=> setFormEdit(true)} fullWidth variant='inline-link' iconName='edit'> Edit</Button>
-            <Button onClick={()=> setFormEdit(true)} fullWidth variant='inline-link' iconName='edit'>Cancel</Button>
+
+          
           </SpaceBetween>
           </form>
    </>

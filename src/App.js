@@ -85,7 +85,7 @@ function MainLayout() {
         navigation={!isAuthRoute && <Sidebar />}
         toolsHide={true}
         navigationHide={isAuthRoute}
-        navigationWidth={250}
+        navigationWidth={210}
         content={<MainContent />}
       />
     </>

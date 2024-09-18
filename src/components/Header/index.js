@@ -1,10 +1,12 @@
 
 import { TopNavigation, Input } from '@cloudscape-design/components';
 import React from 'react';
-import logo from '../../Assets/Images/PTRLogo.png';
+import logo from '../../Assets/Images/Logo.png';
+import { useNavigate } from 'react-router-dom';
 
 
 const TopBar = () => {
+  const navigate = useNavigate();
   return (
     <div id='header' style={{position: 'sticky', zIndex: 1000, top: 0, left: 0, right: 0}}>
       <TopNavigation
@@ -19,40 +21,26 @@ const TopBar = () => {
         utilities={[
           {
             type: "button",
-            iconName: "notification",
-            title: "Notifications",
-            ariaLabel: "Notifications (unread)",
-            badge: true,
-            disableUtilityCollapse: false
-          },
+    iconName: "notification",
+    title: "Notifications",
+    ariaLabel: "Notifications (unread)",
+    badge: true,
+    disableUtilityCollapse: false,
+    onClick: () => {
+      navigate('/app/notifications'); // assuming '/notifications' is the route to your notifications file
+    }
+  },
        
           {
-            type: "menu-dropdown",
+            type: "button",
             text: "Fatima Tabassum",
             description: "fatimatabassum743@gmail.com",
             iconName: "user-profile",
-            items: [
-              { id: "profile", text: "Profile" },
-              { id: "preferences", text: "Preferences" },
-              { id: "security", text: "Security" },
-              {
-                id: "support-group",
-                text: "Support",
-                items: [
-                 
-                  { id: "support", text: "Support" },
-                  {
-                    id: "feedback",
-                    text: "Feedback",
-                    href: "#",
-                    external: true,
-                    externalIconAriaLabel:
-                      " (opens in new tab)"
-                  }
-                ]
-              },
-              { id: "signout", text: "Sign out" }
-            ]
+            onClick: () => {
+              navigate('/app/ProfileDetails'); // assuming '/notifications' is the route to your notifications file
+            }
+         
+          
           }
         ]}
      
