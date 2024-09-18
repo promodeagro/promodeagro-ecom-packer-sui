@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import vector from "../../Assets/Images/Vector.png"
 import PTRLogo from "../../Assets/Images/PTRLogo.png"
 import { Box,Button, Container, FormField, Input, SpaceBetween } from '@cloudscape-design/components'
+import { useNavigate } from 'react-router-dom'
 const CreateNewPassword = () => {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
-
+     const navigate =useNavigate()
     const handleSubmit = (e)=> {
 
     }
@@ -31,8 +32,8 @@ const CreateNewPassword = () => {
               <Input  value={confirmPassword} onChange={(e)=> setConfirmPassword(e.detail.value)} type='password'  placeholder='Confirm Password'/>
             </FormField>
         
-            <Button  variant='primary' fullWidth>Create Password</Button>
-            <Button variant='link' fullWidth>Cancel</Button>
+            <Button  variant='primary'onClick={() => navigate("/auth/signin")}  fullWidth>Create Password</Button>
+            <Button variant='link' fullWidth onClick={() => navigate("/auth/signin")}>Cancel</Button>
           </SpaceBetween>
       </Container>
           </form>

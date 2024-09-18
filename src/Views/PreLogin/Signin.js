@@ -5,17 +5,13 @@ import { Box,Button, Container, FormField, Input, SpaceBetween } from '@cloudsca
 import { useNavigate } from 'react-router-dom'
 const Signin = () => {
   const navigate = useNavigate()
-  const handleSubmit = () =>{
 
-
-    navigate('/app/home')
-  }
   return (
     <div className='login_page'>
       <img src={PTRLogo} alt="" />
       <img className='login_page_vector' src={vector} alt="" />
 
-<form onSubmit={handleSubmit}>
+<form>
       <Container
       header={
         <SpaceBetween direction='vertical' alignItems='center'>
@@ -31,10 +27,12 @@ const Signin = () => {
             <FormField label="Password">
               <Input placeholder='Enter Your Password'/>
             </FormField>
-           <span>
-            <Button variant='link' onClick={navigate("/F")}>Forget Password</Button>
-            </span>
-            <Button variant='primary' fullWidth>Login</Button>
+           <Box float='right'>
+           <Button variant="inline-link"  onClick={() => navigate("/auth/ForgotPassword")}>
+  Forgot Password
+</Button>
+            </Box>
+            <Button variant='primary' onClick={() => navigate("/app/Home")} fullWidth>Login</Button>
           </SpaceBetween>
 
       </Container>

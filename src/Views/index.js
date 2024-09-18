@@ -7,6 +7,7 @@ import OrderDetails from "./Postlogin/OrderDetails";
 import CreateNewPassword from "./PreLogin/CreateNewPassword";
 import  Notifications  from "./Postlogin/Notifications/index";
 import ProfileDetails from "./Postlogin/ProfileDetails";
+import OtpVerification from "./PreLogin/OtpVerification";
 const Home = lazy(() => import("./Postlogin/Home"));
 const StartOrders = lazy(() => import("./Postlogin/StartOrder"));
 
@@ -75,7 +76,7 @@ const Views = () => {
           /> */}
           <Route
             exact
-            path={`${PREFIX_AUTH_PATH}/create-password`}
+            path={`${PREFIX_AUTH_PATH}/CreateNewPassword`}
             element={<CreateNewPassword />}
           />
            <Route
@@ -86,8 +87,13 @@ const Views = () => {
 
           <Route
             exact
-            path={`${PREFIX_AUTH_PATH}/forgot-password`}
+            path={`${PREFIX_AUTH_PATH}/ForgotPassword`}
             element={<ForgotPassword />}
+          />
+           <Route
+            exact
+            path={`${PREFIX_AUTH_PATH}/OtpVerification`}
+            element={<OtpVerification />}
           />
               {/* <Route
             exact
