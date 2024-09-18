@@ -35,7 +35,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div style={{display:"flex",flexDirection:"column",justifyContent:"space-between",gap:"190px"}}>
+    <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "90vh" }}>
     <SideNavigation
       activeHref={activeHref}
       header={{ href: "/", text:<div style={{display:"flex",gap:"20px",alignItems:"center"}}> <div 
