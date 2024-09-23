@@ -2,19 +2,19 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import config from "Views/Config";
 import { postLoginService } from "../../Services";
 
-import customersRes from "Redux-Store/Customers/dummy/customerslist.json";
+import quotationsRes from "Redux-Store/Quotations/dummy/quotation_list.json";
 
-export const fetchCustomers = createAsyncThunk(
-  "customers",
+export const fetchQuotations = createAsyncThunk(
+  "quotations",
   async (params) => {
     try {
-      let url = config.FETCH_CUSTOMERS;
+      let url = config.FETCH_QUOTATIONS;
       const response = await postLoginService.get(url, params);
       //   return response.data
-      return customersRes;
+      return quotationsRes;
     } catch (error) {
       // return error
-      return customersRes;
+      return quotationsRes;
     }
   }
 );

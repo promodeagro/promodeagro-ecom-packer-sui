@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { PREFIX_APP_PATH, PREFIX_AUTH_PATH } from "./../Config/Config";
 
-import SalesAndReport from "./Postlogin/salesAndReport";
+// import SalesAndReport from "./Postlogin/salesAndReport";
 import OrderDetails from "./Postlogin/OrderDetails";
 import CreateNewPassword from "./PreLogin/CreateNewPassword";
 import  Notifications  from "./Postlogin/Notifications/index";
@@ -35,11 +35,11 @@ const Views = () => {
             path={`${PREFIX_APP_PATH}/notifications`}
             element={<Notifications />}
           />
-          <Route
+          {/* <Route
             exact
             path={`${PREFIX_APP_PATH}/salesandreport`}
             element={<SalesAndReport />}
-          />
+          /> */}
           <Route
             exact
             path={`${PREFIX_APP_PATH}/OrderDetails`}

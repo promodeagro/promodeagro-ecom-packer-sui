@@ -29,7 +29,8 @@ const ProfileDetails = () => {
    </Header>
 
 
-   <form onSubmit={handleForm}>
+   <form  onSubmit={handleForm}>
+   
           <SpaceBetween  direction="vertical" size="l">
           <Box
           >
@@ -48,8 +49,9 @@ const ProfileDetails = () => {
         <Icon variant='disabled' name="user-profile" size="large" />
         </div>
       </Box>
-            <FormField label="User Name">
-            <Input  onChange={(e) => setUsername(e.detail.value)} value={username}  />
+      <div className='details-form'>
+            <FormField  label="User Name">
+            <Input   onChange={(e) => setUsername(e.detail.value)} value={username}  />
             </FormField>
             <FormField label="Email">
               <Input  onChange={(e) => setEmail(e.detail.value)} value={email} type='email' />
@@ -57,6 +59,7 @@ const ProfileDetails = () => {
             <FormField  label="Password">
               <Input onChange={(e)=> setPassword(e.detail.value)} value={password} type='password' placeholder='**********' />
             </FormField>
+            </div>
             {formEdit ? (
               <>
           {/* // If formEdit is true, render the "Update" button */}

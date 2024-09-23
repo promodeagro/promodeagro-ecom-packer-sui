@@ -28,7 +28,7 @@ const OtpVerification = () => {
         <div className='login_page'>
         <img src={PTRLogo} alt="" />
         <img className='login_page_vector' src={vector} alt="" />
-      <Container className="otp-container">
+      <Container>
         <Header variant="h1" className="otp-header">Enter Your OTP</Header>
         <p className="otp-subtext">
           Enter the <span className="highlight">six-digit code</span> sent to you to reset your password

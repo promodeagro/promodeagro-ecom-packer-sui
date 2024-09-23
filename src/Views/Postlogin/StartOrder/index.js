@@ -10,6 +10,10 @@ import {
   BreadcrumbGroup,
   Modal,
   StatusIndicator,
+  Grid,
+  ColumnLayout,
+  Badge,
+  Icon,
 } from "@cloudscape-design/components";
 import potatoImg from "../../../Assets/Images/Tomato.jpg";
 import tomatoImg from "../../../Assets/Images/Tomato.jpg";
@@ -111,89 +115,93 @@ const Customers = () => {
         />
       }
     >
-      <SpaceBetween direction="vertical" size="xl">
+     
         {/* Conditionally render the main UI only if hideUI is false */}
         {!hideUI && (
           <>
             {/* Header Section */}
-            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+            <div style={{ display: "flex", gap: "3px" }}>
               <Button
                 onClick={() => navigate(-1)}
                 variant="icon"
                 iconName="arrow-left"
               ></Button>
-              <Header variant="h3">Started Order</Header>
+              <h3 className="header_underline1">Started Order</h3>
             </div>
 
-            <SpaceBetween size="xs">
-              {/* Order Information */}
-              <Box>
-                <TextContent>Order ID: 54764</TextContent>
-                <TextContent>Customer Name: Maruti S</TextContent>
-                <TextContent>Payment: COD</TextContent>
-                <TextContent>Price: Rs.2980</TextContent>
-              </Box>
-
-              {/* Items List Header */}
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <Header variant="h4">Items list (16 Items)</Header>
-                <p
-                  style={{
-                    backgroundColor: "#0972D3",
-                    color: "white",
-                    padding: "5px",
-                    borderRadius: "4px",
-                    width: "14rem",
-                    textAlign: "center",
-                  }}
-                >
-                  Unpacked Order
-                </p>
-              </div>
+            <div className="order-details">
+      <div className="info-row">
+        <span className="value">Order ID :</span>
+        <span className="value">54764</span>
+      </div>
+      <div className="info-row">
+        <span className="label">Customer Name :</span>
+        <span className="value">Maruti S</span>
+      </div>
+      <div className="info-row">
+        <span className="label">Payment :</span>
+        <span className="value">COD</span>
+      </div>
+      <div className="info-row">
+        <span className="label">Price :</span>
+        <span className="value">RS. 2980</span>
+      </div>
+      <div className="items-list">
+        <span className="items-label">Items list <span className="items-count">(16 Items)</span></span>
+        {/* <button className="unpacked-btn"> */}
+          <Badge>  Unpacked Order
+          </Badge>
+          {/* </button> */}
+      </div>
+    </div>
               <hr />
 
               {/* Items Display */}
+              <div className="items-container">
               {items.map((item, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: "flex",
-                    border: "1px solid #e1e1e1",
-                    borderRadius: "8px",
-                    padding: "10px",
-                    alignItems: "center",
-                    gap: "10px",
-                  }}
-                >
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    style={{ width: "80px", height: "80px", objectFit: "cover" }}
-                  />
-                  <div>
-                    <TextContent>Name: &nbsp;&nbsp;{item.name}</TextContent>
-                    <TextContent>Quantity:&nbsp;&nbsp; {item.quantity}</TextContent>
-                    <TextContent>Price:&nbsp;&nbsp; {item.price}</TextContent>
-                  </div>
-                </div>
+         <div className="product-card">
+         <div className="image-container">
+           <img
+             src={item.image} // Replace with actual image link
+             alt="Potato"
+             className="product-image"
+           />
+         </div>
+         <div className="product-details">
+           <div className="detail-row">
+             <span className="label-prod">Name :</span>
+             <span className="value-prod">Potato</span>
+           </div>
+           <div className="detail-row">
+             <span className="label-prod">Quantity :</span>
+             <span className="value-prod">05 Kgs</span>
+           </div>
+           <div className="detail-row">
+             <span className="label-prod">Price :</span>
+             <span className="value-prod">Rs. 250</span>
+           </div>
+         </div>
+       </div>
               ))}
-            </SpaceBetween>
+              </div>
+       
 
             {/* Cost Details Section */}
             <h3>Cost Details</h3>
+            <SpaceBetween direction="vertical" size="l">
             <Container>
               <SpaceBetween direction="vertical" size="xxs">
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span>Sub Total :</span>
-                  <span>RS. 2980</span>
+                  <strong>RS. 2980</strong>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span>Shipping Charges :</span>
-                  <span>RS. 80</span>
+                  <strong>RS. 80</strong>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span>Gross Amount :</span>
-                  <span>RS. 2980</span>
+                  <strong>RS. 2980</strong>
                 </div>
               </SpaceBetween>
               <hr />
@@ -202,6 +210,8 @@ const Customers = () => {
                   display: "flex",
                   justifyContent: "space-between",
                   fontWeight: "bold",
+                  alignItems:"center",
+                  alignContent:"center"
                 }}
               >
                 <span>Total Amount :</span>
@@ -210,11 +220,12 @@ const Customers = () => {
             </Container>
 
             {/* Pack Order Button */}
-            <Box textAlign="center">
-              <Button variant="primary" style={{ width: "100%" }} onClick={openCamera}>
+        
+              <Button variant="primary" fullWidth style={{ width: "100%" }} onClick={openCamera}>
                 Pack Order
               </Button>
-            </Box>
+              </SpaceBetween>
+    
           </>
         )}
 
@@ -222,10 +233,10 @@ const Customers = () => {
         {isCameraOpen && (
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
             <div>
-              <video ref={videoRef} width="100%" height="100%" />
+              <video ref={videoRef} width="100%" height="100%"  />
               <canvas ref={canvasRef} width="100%" height="100%" style={{ display: 'none' }} /> {/* Hidden Canvas */}
               <Box textAlign="center">
-                <Button variant="primary" onClick={takePhoto}>
+                <Button variant="inline-link" onClick={takePhoto}>
                   Take Photo
                 </Button>
               </Box>
@@ -238,32 +249,35 @@ const Customers = () => {
           <div style={{ position: "relative" }}>
             <h4>Photo Preview:</h4>
             <img src={photo} alt="Preview" style={{ width: "100%", height: "100%" }} />
-            <Box textAlign="center">
+            <div style={{textAlign:"center"}}>
               <Button variant="link" onClick={retakePhoto}>
                 Retake Photo
               </Button>
               <Button variant="primary" onClick={submitPhoto}>
                 Complete Pack Order
               </Button>
-            </Box>
+            </div>
 
             {/* Modal - Display success message */}
             <Modal
+              size="small"
               visible={isModalVisible}
               onDismiss={() => setIsModalVisible(false)}
               closeAriaLabel="Close modal"
               // header="Success"
             >
-              <div style={{color:"green"}}>
-                <h2>
-              Successfully Took Image
-              </h2>
-              <StatusIndicator type="success"></StatusIndicator>
+              <div style={{color:"green",textAlign:"center"}}>
+                <Icon name="status-positive" size="big"></Icon>
+              {/* <StatusIndicator type="success"></StatusIndicator> */}
+                <h4>
+              Successfully
+              </h4>
+           
               </div>
             </Modal>
           </div>
         )}
-      </SpaceBetween>
+
     </ContentLayout>
   );
 };

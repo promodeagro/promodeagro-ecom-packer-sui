@@ -38,7 +38,7 @@ const Sidebar = () => {
     <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "90vh" }}>
     <SideNavigation
       activeHref={activeHref}
-      header={{ href: "/", text:<div style={{display:"flex",gap:"20px",alignItems:"center"}}> <div 
+      header={{ href: "/", text:<div style={{display:"flex",gap:"10px",alignItems:"center"}}> <div 
         style={{
           width:"40px" ,
           height:"40px" ,
@@ -52,7 +52,7 @@ const Sidebar = () => {
         }}
         >
     <Icon  variant='disabled' name="user-profile" size="medium" />
-    </div> <Box variant="h4">Maruti S</Box></div> }}
+    </div> <Box variant="h3">Maruti S</Box></div> }}
       onFollow={handleFollow}
       items={pages}
     />

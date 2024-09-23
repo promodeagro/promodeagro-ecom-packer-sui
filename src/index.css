@@ -140,14 +140,41 @@ button.awsui_button_vjswe_15u39_105.awsui_variant-primary_vjswe_15u39_248{
   color: white !important;
   border: none !important;
 }
-span.awsui_icon_h11ix_ayzd6_101.awsui_size-normal-mapped-height_h11ix_ayzd6_157.awsui_size-normal_h11ix_ayzd6_153.awsui_variant-normal_h11ix_ayzd6_229{
+/* span.awsui_icon_h11ix_ayzd6_101.awsui_size-normal-mapped-height_h11ix_ayzd6_157.awsui_size-normal_h11ix_ayzd6_153.awsui_variant-normal_h11ix_ayzd6_229{
   color: white !important;
-}
+} */
 /* .awsui_flash_1q84n_1mepa_97.awsui_flash-type-success_1q84n_1mepa_897.awsui_flash-with-motion_1q84n_1mepa_97.awsui_flash-refresh_1q84n_1mepa_790.awsui_entered_1q84n_1mepa_171.awsui-context-flashbar{
   background-color: white !important;
   color: #037F0C !important;
   
 } */
+.customer-info {
+  display: grid;
+  grid-template-columns: auto 1fr; /* First column auto, second column fills remaining space */
+  gap: 7px 15px; /* 5px row gap, 15px column gap */
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.info-row {
+  display: contents; /* Maintain inline structure for each row */
+}
+
+.label {
+  font-weight: normal;
+
+}
+
+.name, .items {
+  font-weight: bold;
+  justify-self: start; /* Align the value to the left */
+}
+
+.items {
+  font-style: italic;
+  justify-self: start; /* Align 16 Items to the left to reduce gap */
+}
+
 
 .otp-container {
   max-width: 400px;
@@ -184,12 +211,12 @@ span.awsui_icon_h11ix_ayzd6_101.awsui_size-normal-mapped-height_h11ix_ayzd6_157.
 }
 
 .otp-input {
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 36px;
   font-size: 18px;
   text-align: center;
   border-radius: 5px;
-  border: 1px solid #ddd;
+  border: 1px solid #9BA7B6;
 }
 
 .otp-input:focus {
@@ -197,7 +224,141 @@ span.awsui_icon_h11ix_ayzd6_101.awsui_size-normal-mapped-height_h11ix_ayzd6_157.
   outline: none;
   box-shadow: 0px 0px 5px rgba(0, 115, 187, 0.5);
 }
+.order-details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px 20px; /* Control the gaps between the rows and columns */
+  font-family: Arial, sans-serif;
+  color: #333;
+  width: 100%; /* Full width to fill container */
+}
 
+.info-row {
+  display: contents; /* Allows the grid layout to keep consistent behavior */
+}
+
+.label {
+  font-weight: normal;
+  /* justify-self: end; */
+}
+
+.value {
+  font-weight: bold;
+}
+
+.items-list {
+  grid-column: span 2; /* Spans across two columns */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+}
+
+.items-label {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.items-count {
+  font-weight: normal;
+  font-size: 12px;
+  color: #666;
+}
+
+.unpacked-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+
+}
+.packed-btn {
+  background-color: #0972D3;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+
+}
+.header_underline{
+  position: relative;
+}
+.header_underline::after{
+  content: '';
+  position: absolute;
+  width: 160px;
+  height: 2px;
+  background-color: #0972D3;
+  bottom: -3px;
+  border-radius: 2px;
+  left: 0;
+}
+
+
+
+.product-card {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid #D9D9D9;
+
+  border-radius: 8px;
+
+  width: 95%;
+  margin-bottom: 10px;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid #ccc; /* Add vertical line here */
+  padding-right: 20px; /* Space between the line and details */
+  margin-right: 20px; /* Space between the image and the details */
+}
+
+.product-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.product-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-row {
+
+   display: grid;
+   grid-template-columns: auto 1fr;
+   gap: 10px 20px; /* Control the gaps between the rows and columns */
+   font-family: Arial, sans-serif;
+   color: #333;
+   width: 100%; 
+  margin-bottom: 5px;
+}
+
+.label-prod {
+  font-weight: normal;
+  color: #333;
+ 
+}
+
+.value-prod {
+
+  font-weight: bold;
+  color: #555;
+  justify-self: end;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0; /* Remove margin on the last row */
+}
 
 
 

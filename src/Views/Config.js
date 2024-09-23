@@ -1,12 +1,13 @@
-const BASE_URL = "https://lou294nkli.execute-api.us-east-1.amazonaws.com";
+const BASE_URL = "https://7fy0psdjel.execute-api.us-east-1.amazonaws.com/dev";
 
 const Config = {
   BASE_URL,
+  // GET_UNPACKEDORDERS:`${BASE_URL}/getAllUnpackedOrders`,
   FETCH_QUOTATIONS: `${BASE_URL}/users`,
   FINISH_PRODUCT_SPECIFICATIONS: `${BASE_URL}/users`,
   FINISH_PRODUCT_VIEW_ATACHMENTS: `${BASE_URL}/users`,
   FINISH_PRODUCT_DETAILS: `${BASE_URL}/users`,
-  FETCH_ORDERS: `${BASE_URL}/order`,
+  FETCH_ORDERS: "https://7fy0psdjel.execute-api.us-east-1.amazonaws.com/dev/getAllUnpackedOrders",
   // FETCH_FILTER_ORDERS: `${BASE_URL}/order`, // Ensure this is used correctly in the code
   // SEARCH_ORDER_BY_ID: `${BASE_URL}/order`,  
   ORDERS_DETAILS:`${BASE_URL}/order/{id}`,

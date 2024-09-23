@@ -1,39 +1,40 @@
-
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchProducts } from "Redux-Store/Products/ProductThunk";
+import {
+fetchBatchSheet
+} from "Redux-Store/BatchSheet/BatchThunk";
 import status from "Redux-Store/Constants";
 
-const ProductsSlice = createSlice({
-  name: "products",
+const BatchSheetSlice = createSlice({
+  name: "batchsheet",
   initialState: {
-    products: {
+    batchSheetData: {
       status: null,
     },
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProducts.pending.toString(), (state, action) => {
+      .addCase(fetchBatchSheet.pending.toString(), (state, action) => {
         return {
           ...state,
-          products: {
+          batchSheetData: {
             status: status.IN_PROGRESS,
           },
         };
       })
-      .addCase(fetchProducts.fulfilled.toString(), (state, { payload }) => {
+      .addCase(fetchBatchSheet.fulfilled.toString(), (state, { payload }) => {
         return {
           ...state,
-          products: {
+          batchSheetData: {
             status: status.SUCCESS,
             data: payload.data,
           },
         };
       })
-      .addCase(fetchProducts.rejected.toString(), (state, action) => {
+      .addCase(fetchBatchSheet.rejected.toString(), (state, action) => {
         return {
           ...state,
-          products: {
+          batchSheetData: {
             status: status.FAILURE,
           },
         };
@@ -41,4 +42,4 @@ const ProductsSlice = createSlice({
   },
 });
 
-export default ProductsSlice.reducer;
+export default BatchSheetSlice.reducer;

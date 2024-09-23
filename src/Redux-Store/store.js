@@ -1,24 +1,26 @@
 import { configureStore } from "@reduxjs/toolkit";
+import QuotationsReducer from "Redux-Store/Quotations/QuotationsSlice";
+import FinishProductSpecificationSlice from "./FinishProductSpecification/FinishProductSpecificationSlice";
+
 import CustomersReducer from "Redux-Store/Customers/CustomersSlice";
-import OrdersReducer from "Redux-Store/Orders/OrdersSlice"; // Corrected import name
+
+import OrdersSlice from "Redux-Store/Orders/OrdersSlice";
+import BatchSheet from "Redux-Store/BatchSheet/BatchSheetSlice";
 import ProductsSlice from "./Products/ProductsSlice";
-import itemSlice from "Redux-Store/Inventory/slice";
-import forgotPwdReducer from "Redux-Store/authenticate/ForgotPwd/forgotPwdSlice"
-import resetPwdSlice from "Redux-Store/authenticate/newpwd/newPwdSlice"
-import otpSlice from "Redux-Store/authenticate/otpVerify/otpVerifySlice"
-import authReducer from "Redux-Store/authenticate/signin/signinSlice"
-import orderSlice from "Redux-Store/Inventory/orderSlice/Slice"
+import RawMaterialsSlice from "./Inventory/RawMaterials/RawMaterialsSlice";
+import PurchaseOrderSlice from "./Inventory/PurchaseOrders/PurchaseOrderSlice";
+import VendorProfilesSlice from "Redux-Store/Inventory/VendorProfile/VendorProfileSlice";
 const store = configureStore({
   reducer: {
-    orders: OrdersReducer,
+    savedQuotations: QuotationsReducer,
+    finishProductSpecifications: FinishProductSpecificationSlice,
+    orders: OrdersSlice,
     customers: CustomersReducer,
+    batchsheet: BatchSheet,
     products: ProductsSlice,
-    items: itemSlice,
-    ordersInInventory :orderSlice,
-    auth:authReducer,
-    forgotPwd : forgotPwdReducer,
-    resetPwd:resetPwdSlice,
-    otp:otpSlice,
+    rawmaterials: RawMaterialsSlice,
+    purchaseorders: PurchaseOrderSlice,
+    vendorprofile: VendorProfilesSlice,
   },
 });
 
