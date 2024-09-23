@@ -1,4 +1,4 @@
-const BASE_URL = "https://7fy0psdjel.execute-api.us-east-1.amazonaws.com/dev";
+const BASE_URL = "https://7fy0psdjel.execute-api.us-east-1.amazonaws.com";
 
 const Config = {
   BASE_URL,
@@ -7,7 +7,7 @@ const Config = {
   FINISH_PRODUCT_SPECIFICATIONS: `${BASE_URL}/users`,
   FINISH_PRODUCT_VIEW_ATACHMENTS: `${BASE_URL}/users`,
   FINISH_PRODUCT_DETAILS: `${BASE_URL}/users`,
-  FETCH_ORDERS: "https://7fy0psdjel.execute-api.us-east-1.amazonaws.com/dev/getAllUnpackedOrders",
+  FETCH_ORDERS: `${BASE_URL}/dev/getAllUnpackedOrders`,
   // FETCH_FILTER_ORDERS: `${BASE_URL}/order`, // Ensure this is used correctly in the code
   // SEARCH_ORDER_BY_ID: `${BASE_URL}/order`,  
   ORDERS_DETAILS:`${BASE_URL}/order/{id}`,
@@ -27,11 +27,12 @@ const Config = {
    FETCH_PURCHASE_ORDER:`${BASE_URL}/users`,
    FETCH_PURCHASE_REQUSTION_LIST:`${BASE_URL}/users`,
    VENDOR_PROFILE:`${BASE_URL}/users`,
-   FETCH_CUSTOMER:`${BASE_URL}/user`,
-   AUTH_USER:`${BASE_URL}/auth/signin`,
-   SIGNUP:`${BASE_URL}/auth/signup`,
-   FORGOT_PASSSWORD:`${BASE_URL}/auth/forgot-password`,
-   RESET_PASSWORD:`${BASE_URL}/auth/reset-password`,
+   FETCH_PACKEDORDERS:`${BASE_URL}/dev/getAllPackedOrders`,
+   FETCH_ORDERSDETAILs_BY_ID:`${BASE_URL}/dev/OrderDetails`,
+  //  AUTH_USER:`${BASE_URL}/auth/signin`,
+  //  SIGNUP:`${BASE_URL}/auth/signup`,
+  //  FORGOT_PASSSWORD:`${BASE_URL}/auth/forgot-password`,
+  //  RESET_PASSWORD:`${BASE_URL}/auth/reset-password`,
 };
 
 export default Config;

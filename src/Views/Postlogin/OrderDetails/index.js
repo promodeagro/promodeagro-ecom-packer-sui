@@ -1,170 +1,177 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
-  Header,
   Button,
-  Box,
   SpaceBetween,
-  TextContent,
-  ContentLayout,
+  Badge,
   BreadcrumbGroup,
-  Badge
 } from "@cloudscape-design/components";
+import { useParams, useNavigate } from "react-router-dom";
 import potatoImg from "../../../Assets/Images/Tomato.jpg";
 import tomatoImg from "../../../Assets/Images/Tomato.jpg";
 import carrotImg from "../../../Assets/Images/Tomato.jpg";
-import cucumberImg from "../../../Assets/Images/Tomato.jpg"
-import { useNavigate } from "react-router-dom";
+import cucumberImg from "../../../Assets/Images/Tomato.jpg";
 
 const OrderDetails = () => {
-  const navigate = useNavigate(); // Initialize navigate
-  const items = [
-    {
-      name: "Potato",
-      quantity: "05 Kgs",
-      price: "Rs. 250",
-      image: potatoImg,
-    },
-    {
-      name: "Tomato",
-      quantity: "500 Grams",
-      price: "Rs. 250",
-      image: tomatoImg,
-    },
-    {
-      name: "Carrot",
-      quantity: "05 Pieces",
-      price: "Rs. 250",
-      image: carrotImg,
-    },
-    {
-      name: "Cucumber",
-      quantity: "05 Kgs",
-      price: "Rs. 250",
-      image: cucumberImg,
-    },
-    // Add more items as needed
-  ];
+  const { orderId } = useParams();
+  const navigate = useNavigate();
 
-  return (
-    <ContentLayout
-      disableOverlap
-      headerVariant="high-contrast"
-      breadcrumbs={
-        <BreadcrumbGroup
-          items={[
-            { text: "Home", href: "/app/dashboard" },
-            { text: " Order Details", href: "/app/customers" },
-          ]}
-          ariaLabel="Breadcrumbs"
-        />
+  // State to store order details
+  const [orderDetails, setOrderDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Fetch order details from API
+    const fetchOrderDetails = async () => {
+      try {
+        const response = await fetch(`https://7fy0psdjel.execute-api.us-east-1.amazonaws.com/dev/OrderDetails/${orderId}`); // Replace with your actual API URL
+        if (!response.ok) {
+          throw new Error("Failed to fetch order details");
+        }
+        const data = await response.json();
+        setOrderDetails(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-    >
-        <>
-            {/* Header Section */}
-            <div style={{ display: "flex", gap: "3px" }}>
-              <Button
-                onClick={() => navigate(-1)}
-                variant="icon"
-                iconName="arrow-left"
-              ></Button>
-              <h3> View Details</h3>
+    };
+
+    fetchOrderDetails();
+  }, [orderId]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!orderDetails) {
+    return <div>No order details found</div>;
+  }
+
+  const { CustomerName, Payment, Price, ItemsList, CostDetails } = orderDetails;
+  console.log(orderDetails,"specific");
+  return (
+    <div>
+      <BreadcrumbGroup
+        items={[
+          { text: "Home", href: "/app/dashboard" },
+          { text: "Order Details", href: "/app/orders" },
+        ]}
+        ariaLabel="Breadcrumbs"
+      />
+
+      <div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
+        <Button
+          onClick={() => navigate(-1)}
+          variant="icon"
+          iconName="arrow-left"
+        />
+        <h3>View Details</h3>
+      </div>
+
+      {/* Order Details */}
+      <div className="order-details">
+        <div className="info-row">
+          <span className="label">Order ID :</span>
+          <span className="value">{orderId}</span>
+        </div>
+        <div className="info-row">
+          <span className="label">Customer Name :</span>
+          <span className="value">{CustomerName}</span>
+        </div>
+        <div className="info-row">
+          <span className="label">Payment :</span>
+          <span className="value">{Payment.method}</span>
+        </div>
+        <div className="info-row">
+          <span className="label">Price :</span>
+          <span className="value">₹{Price}</span>
+        </div>
+        <div className="items-list">
+          <span className="items-label">
+            Items list <span className="items-count">({ItemsList.length} Items)</span>
+          </span>
+          <Badge color="blue">Packed Order</Badge>
+        </div>
+      </div>
+
+      <hr />
+
+      {/* Items Display */}
+      <div className="items-container">
+        {ItemsList.map((item, index) => (
+          <div key={index} className="product-card">
+            <div className="image-container">
+              <img
+                src={
+                  item.name === "Potato"
+                    ? potatoImg
+                    : item.name === "Tomato"
+                    ? tomatoImg
+                    : item.name === "Carrot"
+                    ? carrotImg
+                    : cucumberImg
+                }
+                alt={item.name}
+                className="product-image"
+              />
             </div>
+            <div className="product-details">
+              <div className="detail-row">
+                <span className="label-prod">Name :</span>
+                <span className="value-prod">{item.Name}</span>
+              </div>
+              <div className="detail-row">
+                <span className="label-prod">Quantity :</span>
+                <span className="value-prod">{item.Quantity}</span>
+              </div>
+              <div className="detail-row">
+                <span className="label-prod">Price :</span>
+                <span className="value-prod">₹{item.Price}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
 
-            <div className="order-details">
-      <div className="info-row">
-        <span className="label">Order ID :</span>
-        <span className="value">54764</span>
-      </div>
-      <div className="info-row">
-        <span className="label">Customer Name :</span>
-        <span className="value">Maruti S</span>
-      </div>
-      <div className="info-row">
-        <span className="label">Payment :</span>
-        <span className="value">COD</span>
-      </div>
-      <div className="info-row">
-        <span className="label">Price :</span>
-        <span className="value">RS. 2980</span>
-      </div>
-      <div className="items-list">
-        <span className="items-label">Items list <span className="items-count">(16 Items)</span></span>
-        {/* <button className="packed-btn"> */}
-          <Badge color="blue">
-          packed Order
-          </Badge>
-         {/* </button> */}
-      </div>
+      {/* Cost Details */}
+      <h3>Cost Details</h3>
+      <SpaceBetween direction="vertical" size="l">
+        <Container>
+          <SpaceBetween direction="vertical" size="xxs">
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span>Sub Total :</span>
+              <strong>₹{CostDetails.SubTotal}</strong>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span>Shipping Charges :</span>
+              <strong>₹{CostDetails.ShippingCharges}</strong>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span>Gross Amount :</span>
+              <strong>₹{CostDetails.GrossDetails}</strong>
+            </div>
+          </SpaceBetween>
+          <hr />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              fontWeight: "bold",
+              alignItems: "center",
+            }}
+          >
+            <span>Total Amount :</span>
+            <span>₹{CostDetails.TotalAmount}</span>
+          </div>
+        </Container>
+      </SpaceBetween>
     </div>
-              <hr />
-
-              {/* Items Display */}
-              <div className="items-container">
-              {items.map((item, index) => (
-         <div className="product-card">
-         <div className="image-container">
-           <img
-             src={item.image} // Replace with actual image link
-             alt="Potato"
-             className="product-image"
-           />
-         </div>
-         <div className="product-details">
-           <div className="detail-row">
-             <span className="label-prod">Name :</span>
-             <span className="value-prod">Potato</span>
-           </div>
-           <div className="detail-row">
-             <span className="label-prod">Quantity :</span>
-             <span className="value-prod">05 Kgs</span>
-           </div>
-           <div className="detail-row">
-             <span className="label-prod">Price :</span>
-             <span className="value-prod">Rs. 250</span>
-           </div>
-         </div>
-       </div>
-              ))}
-              </div>
-       
-
-            {/* Cost Details Section */}
-            <h3>Cost Details</h3>
-            <SpaceBetween direction="vertical" size="l">
-            <Container>
-              <SpaceBetween direction="vertical" size="xxs">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span>Sub Total :</span>
-                  <strong>RS. 2980</strong>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span>Shipping Charges :</span>
-                  <strong>RS. 80</strong>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span>Gross Amount :</span>
-                  <strong>RS. 2980</strong>
-                </div>
-              </SpaceBetween>
-              <hr />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontWeight: "bold",
-                  alignItems:"center",
-                  alignContent:"center"
-                }}
-              >
-                <span>Total Amount :</span>
-                <span>RS. 2980</span>
-              </div>
-            </Container>
-              </SpaceBetween>
-    
-          </>
-    </ContentLayout>
   );
 };
 

@@ -42,7 +42,7 @@ const Views = () => {
           /> */}
           <Route
             exact
-            path={`${PREFIX_APP_PATH}/OrderDetails`}
+            path={`${PREFIX_APP_PATH}/OrderDetails/:orderId`}
             element={<OrderDetails/>}
           />
           <Route
