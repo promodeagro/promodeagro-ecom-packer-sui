@@ -271,7 +271,7 @@ const Customers = () => {
      {isCameraOpen && (
       <div>
         <div>
-          <video ref={videoRef} width="100%" height="98vh"  />
+          <video ref={videoRef} width="100%" style={{height:"92"}}  />
           <canvas ref={canvasRef} width="100%" height="100%" style={{ display: 'none' }} /> {/* Hidden Canvas */}
           <Box textAlign="center">
             <Button variant="inline-link" onClick={takePhoto}>
@@ -285,8 +285,8 @@ const Customers = () => {
     {/* Photo Preview and Modal */}
     {photo && (
       <div style={{ position: "relative" }}>
-        <h4>Photo Preview:</h4>
-        <img src={photo} alt="Preview" style={{ width: "100%", height: "95vh" }} />
+      
+        <img src={photo} alt="Preview" style={{ width: "100%", height: "90vh" }} />
         <div style={{textAlign:"center"}}>
           <Button variant="link" onClick={retakePhoto}>
             Retake Photo
