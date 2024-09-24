@@ -75,7 +75,8 @@ const OrderDetails = () => {
       <div className="details">
         <div className="info-row">
           <span className="label">Order ID :</span>
-          <span className="value">{orderId}</span>
+          <span className="value">{orderId?.slice(-7)}</span>
+
         </div>
         <div className="info-row">
           <span className="label">Customer Name :</span>

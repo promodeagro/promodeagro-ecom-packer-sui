@@ -92,7 +92,7 @@ const navigate=useNavigate()
                       justifyContent: "space-between",
                     }}
                   >
-                    <strong>Order ID: {order.OrderId}</strong>
+                    <strong>Order ID: {order.OrderId?.slice(-7)}</strong>
                     <Badge>{order?.OrderStatus === "order placed" ? "Unpacked" : ""}</Badge>
 
                   </div>

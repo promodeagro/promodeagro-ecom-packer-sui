@@ -106,7 +106,7 @@ const PackedOrders = () => {
               <SpaceBetween direction="vertical" size="xs">
                 <Box>
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <strong>Order ID: {order.OrderId}</strong>
+                    <strong>Order ID: {order.OrderId?.slice(-7)}</strong>
                     <Badge color="blue">{order.OrderStatus} Order</Badge>
                   </div>
                   <SpaceBetween direction="vertical" size="s">

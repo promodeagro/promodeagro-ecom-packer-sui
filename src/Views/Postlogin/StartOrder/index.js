@@ -98,23 +98,50 @@ const Customers = () => {
   };
 
   // Take photo and show modal
-  const takePhoto = () => {
-    if (!canvasRef.current) return; // Ensure the canvas is rendered
+ // Take photo and show modal
+const takePhoto = () => {
+  if (!canvasRef.current) return; // Ensure the canvas is rendered
 
-    const context = canvasRef.current.getContext("2d");
-    context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
-    const dataURL = canvasRef.current.toDataURL("image/png");
-    setPhoto(dataURL);
-    setIsCameraOpen(false);
-    setIsModalVisible(true); // Show success modal
-    videoRef.current.srcObject.getTracks().forEach((track) => track.stop()); // Stop the video stream
-  };
+  const context = canvasRef.current.getContext("2d");
+  context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+  const dataURL = canvasRef.current.toDataURL("image/png");
+  setPhoto(dataURL);
+  setIsCameraOpen(false);
+  setIsModalVisible(true); // Show success modal
+  videoRef.current.srcObject.getTracks().forEach((track) => track.stop()); // Stop the video stream
+
+  // Call the POST API to upload the photo
+  uploadPhoto(dataURL);
+};
+
+// Function to upload the photo to the API
+const uploadPhoto = async (dataURL) => {
+  try {
+    const response = await fetch(`https://7fy0psdjel.execute-api.us-east-1.amazonaws.com/dev/orders/${orderId}/upload-photo`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ photo: dataURL }), // Send the photo in the request body
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to upload photo");
+    }
+
+    // Handle success
+    console.log("Photo uploaded successfully");
+  } catch (error) {
+    console.error("Error uploading photo:", error.message);
+  }
+};
+
 
   // Retake photo
-  const retakePhoto = () => {
-    setPhoto(null);
-    openCamera();
-  };
+  // const retakePhoto = () => {
+  //   setPhoto(null);
+  //   openCamera();
+  // };
 
   // Submit photo and navigate to Pack Order page
   const submitPhoto = () => {
@@ -128,6 +155,7 @@ const Customers = () => {
   };
   const { CustomerName, Payment, Price, ItemsList, CostDetails,items } = orderDetails;
   console.log(orderDetails,"specific");
+  console.log(photo,"photo");
 
   return (
     <>
@@ -163,7 +191,8 @@ const Customers = () => {
             <div className="details">
       <div className="info-row">
         <span className="value">Order ID :</span>
-        <span className="value">{orderId}</span>
+        <span className="value">{orderId?.slice(-7)}</span>
+
       </div>
       <div className="info-row">
         <span className="label">Customer Name :</span>
@@ -271,7 +300,7 @@ const Customers = () => {
      {isCameraOpen && (
       <div>
         <div>
-          <video ref={videoRef} width="100%" style={{height:"92"}}  />
+          <video ref={videoRef} width="100%" style={{height:"200"}}  />
           <canvas ref={canvasRef} width="100%" height="100%" style={{ display: 'none' }} /> {/* Hidden Canvas */}
           <Box textAlign="center">
             <Button variant="inline-link" onClick={takePhoto}>
@@ -286,11 +315,11 @@ const Customers = () => {
     {photo && (
       <div style={{ position: "relative" }}>
       
-        <img src={photo} alt="Preview" style={{ width: "100%", height: "90vh" }} />
+        <img src={photo} alt="Preview" style={{ width: "100%", height: "82vh" }} />
         <div style={{textAlign:"center"}}>
-          <Button variant="link" onClick={retakePhoto}>
+          {/* <Button variant="link" onClick={retakePhoto}>
             Retake Photo
-          </Button>
+          </Button> */}
           <Button variant="primary" onClick={submitPhoto}>
             Complete Pack Order
           </Button>
