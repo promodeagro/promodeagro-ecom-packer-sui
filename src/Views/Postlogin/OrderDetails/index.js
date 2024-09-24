@@ -72,7 +72,7 @@ const OrderDetails = () => {
       </div>
 
       {/* Order Details */}
-      <div className="order-details">
+      <div className="details">
         <div className="info-row">
           <span className="label">Order ID :</span>
           <span className="value">{orderId}</span>
@@ -111,18 +111,18 @@ const OrderDetails = () => {
                 className="product-image"
               />
             </div>
-            <div className="product-details">
-              <div className="detail-row">
-                <span className="label-prod">Name :</span>
-                <span className="value-prod">{item.Name}</span>
+            <div className="details">
+              <div className="info-row">
+                <span className="label">Name :</span>
+                <span className="value">{item.Name}</span>
               </div>
-              <div className="detail-row">
-                <span className="label-prod">Quantity :</span>
-                <span className="value-prod">{item.Quantity}</span>
+              <div className="info-row">
+                <span className="label">Quantity :</span>
+                <span className="value">{item.Quantity}</span>
               </div>
-              <div className="detail-row">
-                <span className="label-prod">Price :</span>
-                <span className="value-prod">₹{item.Price}</span>
+              <div className="info-row">
+                <span className="label">Price :</span>
+                <span className="value">₹{item.Price}</span>
               </div>
             </div>
           </div>

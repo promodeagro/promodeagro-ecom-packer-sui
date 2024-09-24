@@ -224,7 +224,7 @@ button.awsui_button_vjswe_15u39_105.awsui_variant-primary_vjswe_15u39_248{
   outline: none;
   box-shadow: 0px 0px 5px rgba(0, 115, 187, 0.5);
 }
-.order-details {
+.details {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 10px 20px; /* Control the gaps between the rows and columns */
@@ -327,34 +327,13 @@ button.awsui_button_vjswe_15u39_105.awsui_variant-primary_vjswe_15u39_248{
   border-radius: 10px;
 }
 
-.product-details {
-  display: flex;
-  flex-direction: column;
-}
 
-.detail-row {
 
-   display: grid;
-   grid-template-columns: auto 1fr;
-   gap: 10px 20px; /* Control the gaps between the rows and columns */
-   font-family: Arial, sans-serif;
-   color: #333;
-   width: 100%; 
-  margin-bottom: 5px;
-}
 
-.label-prod {
-  font-weight: normal;
-  color: #333;
- 
-}
 
-.value-prod {
 
-  font-weight: bold;
-  color: #555;
-  justify-self: end;
-}
+
+
 
 .detail-row:last-child {
   margin-bottom: 0; /* Remove margin on the last row */
