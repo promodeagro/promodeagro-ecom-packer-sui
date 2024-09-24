@@ -130,6 +130,9 @@ const Customers = () => {
   console.log(orderDetails,"specific");
 
   return (
+    <>
+      {/* Conditionally render the main UI only if hideUI is false */}
+      {!hideUI && (
     <ContentLayout
      defaultPadding
       disableOverlap
@@ -145,9 +148,8 @@ const Customers = () => {
       }
     >
      
-        {/* Conditionally render the main UI only if hideUI is false */}
-        {!hideUI && (
-          <>
+      
+     
             {/* Header Section */}
             <div style={{ display: "flex", gap: "3px" }}>
               <Button
@@ -258,59 +260,62 @@ const Customers = () => {
               </Button>
               </SpaceBetween>
     
-          </>
-        )}
+   
+    
 
-        {/* Camera and Photo Handling */}
-        {isCameraOpen && (
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <div>
-              <video ref={videoRef} width="100%" height="100%"  />
-              <canvas ref={canvasRef} width="100%" height="100%" style={{ display: 'none' }} /> {/* Hidden Canvas */}
-              <Box textAlign="center">
-                <Button variant="inline-link" onClick={takePhoto}>
-                  Take Photo
-                </Button>
-              </Box>
-            </div>
-          </div>
-        )}
-
-        {/* Photo Preview and Modal */}
-        {photo && (
-          <div style={{ position: "relative" }}>
-            <h4>Photo Preview:</h4>
-            <img src={photo} alt="Preview" style={{ width: "100%", height: "100%" }} />
-            <div style={{textAlign:"center"}}>
-              <Button variant="link" onClick={retakePhoto}>
-                Retake Photo
-              </Button>
-              <Button variant="primary" onClick={submitPhoto}>
-                Complete Pack Order
-              </Button>
-            </div>
-
-            {/* Modal - Display success message */}
-            <Modal
-              size="small"
-              visible={isModalVisible}
-              onDismiss={() => setIsModalVisible(false)}
-              closeAriaLabel="Close modal"
-              // header="Success"
-            >
-              <div style={{color:"green",textAlign:"center"}}>
-                <Icon name="status-positive" size="big"></Icon>
-              {/* <StatusIndicator type="success"></StatusIndicator> */}
-                <h4>
-              Successfully
-              </h4>
-           
-              </div>
-            </Modal>
-          </div>
-        )}
+       
 
     </ContentLayout>
+  )}
+     {/* Camera and Photo Handling */}
+     {isCameraOpen && (
+      <div>
+        <div>
+          <video ref={videoRef} width="100%" height="100%"  />
+          <canvas ref={canvasRef} width="100%" height="100%" style={{ display: 'none' }} /> {/* Hidden Canvas */}
+          <Box textAlign="center">
+            <Button variant="inline-link" onClick={takePhoto}>
+              Take Photo
+            </Button>
+          </Box>
+        </div>
+      </div>
+    )}
+
+    {/* Photo Preview and Modal */}
+    {photo && (
+      <div style={{ position: "relative" }}>
+        <h4>Photo Preview:</h4>
+        <img src={photo} alt="Preview" style={{ width: "100%", height: "100%" }} />
+        <div style={{textAlign:"center"}}>
+          <Button variant="link" onClick={retakePhoto}>
+            Retake Photo
+          </Button>
+          <Button variant="primary" onClick={submitPhoto}>
+            Complete Pack Order
+          </Button>
+        </div>
+
+        {/* Modal - Display success message */}
+        <Modal
+          size="small"
+          visible={isModalVisible}
+          onDismiss={() => setIsModalVisible(false)}
+          closeAriaLabel="Close modal"
+          // header="Success"
+        >
+          <div style={{color:"green",textAlign:"center"}}>
+            <Icon name="status-positive" size="big"></Icon>
+          {/* <StatusIndicator type="success"></StatusIndicator> */}
+            <h4>
+          Successfully
+          </h4>
+       
+          </div>
+        </Modal>
+      </div>
+    )}
+    </>
   );
 };
 
