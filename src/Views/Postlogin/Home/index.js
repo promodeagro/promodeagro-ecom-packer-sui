@@ -93,7 +93,8 @@ const navigate=useNavigate()
                     }}
                   >
                     <strong>Order ID: {order.OrderId}</strong>
-                    <Badge>{order?.OrderStatus}</Badge>
+                    <Badge>{order?.OrderStatus === "order placed" ? "Unpacked" : ""}</Badge>
+
                   </div>
                   <SpaceBetween direction="vertical" size="s">
                     <div className="customer-info">
@@ -114,7 +115,7 @@ const navigate=useNavigate()
                 <Button
                   variant="primary"
                   fullWidth
-                  onClick={() => navigate("/app/StartOrder")}
+                  onClick={() => navigate(`/app/Home/StartOrder/${order?.OrderId}`)}
                   // disabled={orderStatus === status.IN_PROGRESS}
                    // Disable if loading
                 >

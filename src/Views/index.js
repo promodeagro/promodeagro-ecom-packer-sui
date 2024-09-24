@@ -53,7 +53,7 @@ const Views = () => {
 
           <Route
             exact
-            path={`${PREFIX_APP_PATH}/StartOrder`}
+            path={`${PREFIX_APP_PATH}/Home/StartOrder/:orderId`}
             element={<StartOrders/>}
           />
        

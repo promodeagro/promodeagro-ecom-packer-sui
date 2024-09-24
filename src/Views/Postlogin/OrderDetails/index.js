@@ -7,10 +7,7 @@ import {
   BreadcrumbGroup,
 } from "@cloudscape-design/components";
 import { useParams, useNavigate } from "react-router-dom";
-import potatoImg from "../../../Assets/Images/Tomato.jpg";
-import tomatoImg from "../../../Assets/Images/Tomato.jpg";
-import carrotImg from "../../../Assets/Images/Tomato.jpg";
-import cucumberImg from "../../../Assets/Images/Tomato.jpg";
+
 
 const OrderDetails = () => {
   const { orderId } = useParams();
@@ -53,13 +50,13 @@ const OrderDetails = () => {
     return <div>No order details found</div>;
   }
 
-  const { CustomerName, Payment, Price, ItemsList, CostDetails } = orderDetails;
+  const { CustomerName, Payment, Price, ItemsList, CostDetails,items } = orderDetails;
   console.log(orderDetails,"specific");
   return (
     <div>
       <BreadcrumbGroup
         items={[
-          { text: "Home", href: "/app/dashboard" },
+          { text: "Home", href: "/app/Home" },
           { text: "Order Details", href: "/app/orders" },
         ]}
         ariaLabel="Breadcrumbs"
@@ -94,7 +91,7 @@ const OrderDetails = () => {
         </div>
         <div className="items-list">
           <span className="items-label">
-            Items list <span className="items-count">({ItemsList.length} Items)</span>
+            Items list <span className="items-count">({items} Items)</span>
           </span>
           <Badge color="blue">Packed Order</Badge>
         </div>
@@ -108,16 +105,9 @@ const OrderDetails = () => {
           <div key={index} className="product-card">
             <div className="image-container">
               <img
-                src={
-                  item.name === "Potato"
-                    ? potatoImg
-                    : item.name === "Tomato"
-                    ? tomatoImg
-                    : item.name === "Carrot"
-                    ? carrotImg
-                    : cucumberImg
+                src={item.Images
                 }
-                alt={item.name}
+                alt={item.Name}
                 className="product-image"
               />
             </div>

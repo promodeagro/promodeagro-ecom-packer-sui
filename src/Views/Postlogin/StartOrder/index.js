@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,useEffect } from "react";
 import {
   Container,
   Header,
@@ -15,41 +15,37 @@ import {
   Badge,
   Icon,
 } from "@cloudscape-design/components";
-import potatoImg from "../../../Assets/Images/Tomato.jpg";
-import tomatoImg from "../../../Assets/Images/Tomato.jpg";
-import carrotImg from "../../../Assets/Images/Tomato.jpg";
-import cucumberImg from "../../../Assets/Images/Tomato.jpg";
-import { useNavigate } from "react-router-dom";
+
+import { useNavigate,useParams } from "react-router-dom";
 
 const Customers = () => {
+  const { orderId } = useParams();
   const navigate = useNavigate(); // Initialize navigate
-  const items = [
-    {
-      name: "Potato",
-      quantity: "05 Kgs",
-      price: "Rs. 250",
-      image: potatoImg,
-    },
-    {
-      name: "Tomato",
-      quantity: "500 Grams",
-      price: "Rs. 250",
-      image: tomatoImg,
-    },
-    {
-      name: "Carrot",
-      quantity: "05 Pieces",
-      price: "Rs. 250",
-      image: carrotImg,
-    },
-    {
-      name: "Cucumber",
-      quantity: "05 Kgs",
-      price: "Rs. 250",
-      image: cucumberImg,
-    },
-    // Add more items as needed
-  ];
+    // State to store order details
+    const [orderDetails, setOrderDetails] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    useEffect(() => {
+      // Fetch order details from API
+      const fetchOrderDetails = async () => {
+        try {
+          const response = await fetch(`https://7fy0psdjel.execute-api.us-east-1.amazonaws.com/dev/OrderDetails/${orderId}`); // Replace with your actual API URL
+          if (!response.ok) {
+            throw new Error("Failed to fetch order details");
+          }
+          const data = await response.json();
+          setOrderDetails(data);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchOrderDetails();
+    }, [orderId]);
+
+
 
   // State management for camera and modal
   const [isCameraOpen, setIsCameraOpen] = useState(false);
@@ -59,7 +55,37 @@ const Customers = () => {
   const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  useEffect(() => {
+    // Fetch order details from API
+    const fetchOrderDetails = async () => {
+      try {
+        const response = await fetch(`https://7fy0psdjel.execute-api.us-east-1.amazonaws.com/dev/OrderDetails/${orderId}`); // Replace with your actual API URL
+        if (!response.ok) {
+          throw new Error("Failed to fetch order details");
+        }
+        const data = await response.json();
+        setOrderDetails(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchOrderDetails();
+  }, [orderId]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!orderDetails) {
+    return <div>No order details found</div>;
+  }
   // Open camera
   const openCamera = async () => {
     setHideUI(true); // Hide the rest of the UI
@@ -100,15 +126,18 @@ const Customers = () => {
     // Navigate to Pack Order page with submittedImage state
     navigate("/app/Orders", { state: { image: photo } });
   };
+  const { CustomerName, Payment, Price, ItemsList, CostDetails,items } = orderDetails;
+  console.log(orderDetails,"specific");
 
   return (
     <ContentLayout
+     defaultPadding
       disableOverlap
       headerVariant="high-contrast"
       breadcrumbs={
         <BreadcrumbGroup
           items={[
-            { text: "Home", href: "/app/dashboard" },
+            { text: "Home", href: "/app/Home" },
             { text: "Packed Orders", href: "/app/customers" },
           ]}
           ariaLabel="Breadcrumbs"
@@ -132,22 +161,24 @@ const Customers = () => {
             <div className="order-details">
       <div className="info-row">
         <span className="value">Order ID :</span>
-        <span className="value">54764</span>
+        <span className="value">{orderId}</span>
       </div>
       <div className="info-row">
         <span className="label">Customer Name :</span>
-        <span className="value">Maruti S</span>
+        <span className="value">{CustomerName}</span>
       </div>
       <div className="info-row">
         <span className="label">Payment :</span>
-        <span className="value">COD</span>
+        <span className="value">{Payment.method}</span>
       </div>
       <div className="info-row">
         <span className="label">Price :</span>
-        <span className="value">RS. 2980</span>
+        <span className="value">₹{Price}</span>
       </div>
       <div className="items-list">
-        <span className="items-label">Items list <span className="items-count">(16 Items)</span></span>
+      <span className="items-label">
+            Items list <span className="items-count">({items} Items)</span>
+          </span>
         {/* <button className="unpacked-btn"> */}
           <Badge>  Unpacked Order
           </Badge>
@@ -158,28 +189,29 @@ const Customers = () => {
 
               {/* Items Display */}
               <div className="items-container">
-              {items.map((item, index) => (
-         <div className="product-card">
-         <div className="image-container">
-           <img
-             src={item.image} // Replace with actual image link
-             alt="Potato"
-             className="product-image"
-           />
-         </div>
+              {ItemsList.map((item, index) => (
+                <div key={index} className="product-card">
+                <div className="image-container">
+                  <img
+                    src={item.Images
+                    }
+                    alt={item.Name}
+                    className="product-image"
+                  />
+                </div>
          <div className="product-details">
            <div className="detail-row">
              <span className="label-prod">Name :</span>
-             <span className="value-prod">Potato</span>
+             <span className="value-prod">{item.Name}</span>
            </div>
            <div className="detail-row">
              <span className="label-prod">Quantity :</span>
-             <span className="value-prod">05 Kgs</span>
+             <span className="value-prod">{item.Quantity}</span>
            </div>
            <div className="detail-row">
-             <span className="label-prod">Price :</span>
-             <span className="value-prod">Rs. 250</span>
-           </div>
+                <span className="label-prod">Price :</span>
+                <span className="value-prod">₹{item.Price}</span>
+              </div>
          </div>
        </div>
               ))}
@@ -193,15 +225,15 @@ const Customers = () => {
               <SpaceBetween direction="vertical" size="xxs">
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span>Sub Total :</span>
-                  <strong>RS. 2980</strong>
+                  <strong>₹{CostDetails.SubTotal}</strong>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span>Shipping Charges :</span>
-                  <strong>RS. 80</strong>
+                  <strong>₹{CostDetails.ShippingCharges}</strong>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <span>Gross Amount :</span>
-                  <strong>RS. 2980</strong>
+                  <strong>₹{CostDetails.GrossDetails}</strong>
                 </div>
               </SpaceBetween>
               <hr />
@@ -215,7 +247,7 @@ const Customers = () => {
                 }}
               >
                 <span>Total Amount :</span>
-                <span>RS. 2980</span>
+                <span>₹{CostDetails.TotalAmount}</span>
               </div>
             </Container>
 
@@ -231,7 +263,7 @@ const Customers = () => {
 
         {/* Camera and Photo Handling */}
         {isCameraOpen && (
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <div>
               <video ref={videoRef} width="100%" height="100%"  />
               <canvas ref={canvasRef} width="100%" height="100%" style={{ display: 'none' }} /> {/* Hidden Canvas */}
