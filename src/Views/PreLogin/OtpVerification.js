@@ -19,10 +19,13 @@ const OtpVerification = () => {
     };
   
     const handleVerify = () => {
-      // Implement verify logic
-      console.log("OTP entered:", otp.join(""));
-      navigate("/auth/CreateNewPassword")
+      const OTP = otp.join("");
+      console.log("OTP entered:", OTP);
+      
+      // Pass OTP to the next route as state
+      navigate("/auth/CreateNewPassword", { state: { OTP } });
     };
+    
   
     return (
         <div className='login_page'>
