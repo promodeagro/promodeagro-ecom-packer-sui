@@ -103,7 +103,10 @@ const OrderDetails = () => {
       {/* Items Display */}
       <div className="items-container">
         {ItemsList.map((item, index) => (
+          <div style={{marginBottom:"10px"}}>
+              <Container>
           <div key={index} className="product-card">
+      
             <div className="image-container">
               <img
                 src={item.Images
@@ -126,7 +129,9 @@ const OrderDetails = () => {
                 <span className="value">₹{item.Price}</span>
               </div>
             </div>
-          </div>
+            </div>
+            </Container>
+            </div>
         ))}
       </div>
 

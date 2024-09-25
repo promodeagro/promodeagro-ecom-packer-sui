@@ -302,13 +302,7 @@ button.awsui_button_vjswe_15u39_105.awsui_variant-primary_vjswe_15u39_248{
 .product-card {
   display: flex;
   align-items: center;
-  padding: 15px;
-  border: 1px solid #D9D9D9;
 
-  border-radius: 8px;
-
-  width: 95%;
-  margin-bottom: 10px;
 }
 
 .image-container {
@@ -316,8 +310,8 @@ button.awsui_button_vjswe_15u39_105.awsui_variant-primary_vjswe_15u39_248{
   justify-content: center;
   align-items: center;
   border-right: 1px solid #ccc; /* Add vertical line here */
-  padding-right: 20px; /* Space between the line and details */
-  margin-right: 20px; /* Space between the image and the details */
+  padding-right: 10px; /* Space between the line and details */
+  margin-right: 10px; /* Space between the image and the details */
 }
 
 .product-image {
