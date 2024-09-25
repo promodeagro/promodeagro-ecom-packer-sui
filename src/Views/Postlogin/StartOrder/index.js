@@ -29,7 +29,7 @@ const Customers = () => {
       // Fetch order details from API
       const fetchOrderDetails = async () => {
         try {
-          const response = await fetch(`https://7fy0psdjel.execute-api.us-east-1.amazonaws.com/dev/OrderDetails/${orderId}`); // Replace with your actual API URL
+          const response = await fetch(`https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/OrderDetails/${orderId}`); // Replace with your actual API URL
           if (!response.ok) {
             throw new Error("Failed to fetch order details");
           }
@@ -59,7 +59,7 @@ const Customers = () => {
     // Fetch order details from API
     const fetchOrderDetails = async () => {
       try {
-        const response = await fetch(`https://7fy0psdjel.execute-api.us-east-1.amazonaws.com/dev/OrderDetails/${orderId}`); // Replace with your actual API URL
+        const response = await fetch(`https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/OrderDetails/${orderId}`); // Replace with your actual API URL
         if (!response.ok) {
           throw new Error("Failed to fetch order details");
         }
@@ -111,44 +111,72 @@ const takePhoto = () => {
   videoRef.current.srcObject.getTracks().forEach((track) => track.stop()); // Stop the video stream
 
   // Call the POST API to upload the photo
-  uploadPhoto(dataURL);
+  // uploadPhoto(dataURL);
 };
 
 // Function to upload the photo to the API
-const uploadPhoto = async (dataURL) => {
+const uploadPhoto = async (photo) => {
+
   try {
-    const response = await fetch(`https://7fy0psdjel.execute-api.us-east-1.amazonaws.com/dev/orders/${orderId}/upload-photo`, {
+    const response = await fetch(`https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/orders/${orderId}/upload-photo`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ photo: dataURL }), // Send the photo in the request body
+      body: JSON.stringify({ data: photo }), // Send the photo in the request body
     });
 
     if (!response.ok) {
       throw new Error("Failed to upload photo");
     }
 
-    // Handle success
-    console.log("Photo uploaded successfully");
+    const responseData = await response.json(); // Parse the response body as JSON
+    console.log("Photo uploaded successfully:", responseData); // Log the response data
   } catch (error) {
     console.error("Error uploading photo:", error.message);
   }
+  setIsModalVisible(false);
+  console.log("Confirmed");
 };
 
 
+
   // Retake photo
-  // const retakePhoto = () => {
-  //   setPhoto(null);
-  //   openCamera();
-  // };
+  const retakePhoto = () => {
+    setIsModalVisible(false); // Hide the success modal
+    setPhoto(null);
+    openCamera();
+  };
+
+   // PUT API call to complete packing the order
+   const putCompletePackedOrder = async () => {
+    try {
+      const response = await fetch(
+        `https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/orders/${orderId}/CompletePacked`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ Status: "Packed" }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to complete packing the order");
+      }
+      const data = await response.json();
+      console.log("Order status updated successfully:", data);
+    } catch (error) {
+      console.error("Error updating order status:", error.message);
+    }
+  };
 
   // Submit photo and navigate to Pack Order page
-  const submitPhoto = () => {
+  const submitpackedorder = () => {
     setSubmittedImage(photo);
     setPhoto(null);
     setHideUI(false); // Show the UI back after submitting the photo
-    setIsModalVisible(false); // Close modal
+   putCompletePackedOrder();
 
     // Navigate to Pack Order page with submittedImage state
     navigate("/app/Orders", { state: { image: photo } });
@@ -300,7 +328,7 @@ const uploadPhoto = async (dataURL) => {
      {isCameraOpen && (
       <div>
         <div>
-          <video ref={videoRef} width="100%" style={{height:"200"}}  />
+          <video ref={videoRef} width="100%" style={{height:"400"}}  />
           <canvas ref={canvasRef} width="100%" height="100%" style={{ display: 'none' }} /> {/* Hidden Canvas */}
           <Box textAlign="center">
             <Button variant="inline-link" onClick={takePhoto}>
@@ -315,33 +343,40 @@ const uploadPhoto = async (dataURL) => {
     {photo && (
       <div style={{ position: "relative" }}>
       
-        <img src={photo} alt="Preview" style={{ width: "100%", height: "82vh" }} />
+        <img src={photo} alt="Preview" style={{ width: "100%", height: "80vh" }} />
         <div style={{textAlign:"center"}}>
           {/* <Button variant="link" onClick={retakePhoto}>
             Retake Photo
           </Button> */}
-          <Button variant="primary" onClick={submitPhoto}>
+          <Button variant="primary" onClick={submitpackedorder}>
             Complete Pack Order
           </Button>
         </div>
 
         {/* Modal - Display success message */}
+
+
         <Modal
-          size="small"
-          visible={isModalVisible}
-          onDismiss={() => setIsModalVisible(false)}
-          closeAriaLabel="Close modal"
-          // header="Success"
-        >
-          <div style={{color:"green",textAlign:"center"}}>
-            <Icon name="status-positive" size="big"></Icon>
-          {/* <StatusIndicator type="success"></StatusIndicator> */}
-            <h4>
-          Successfully
-          </h4>
-       
-          </div>
-        </Modal>
+  visible={isModalVisible}
+  size="small"
+  onDismiss={() => setIsModalVisible(false)}
+  closeAriaLabel="Close modal"
+  footer={
+    <div style={{ display: "flex", gap:"20px", justifyContent: "flex-end" }}>
+      <Button variant="inline-link" onClick={retakePhoto}>Retake</Button>
+      <Button variant="primary" onClick={() => uploadPhoto(photo)}>
+        Confirm
+      </Button>
+    </div>
+  }
+>
+  <div style={{ color: "green", textAlign: "center" }}>
+    <Icon name="status-positive" size="large" />
+    <h4>Successfully</h4>
+  </div>
+</Modal>
+
+
       </div>
     )}
     </>

@@ -1,4 +1,4 @@
-const BASE_URL = "https://7fy0psdjel.execute-api.us-east-1.amazonaws.com";
+const BASE_URL = "https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com";
 
 const Config = {
   BASE_URL,

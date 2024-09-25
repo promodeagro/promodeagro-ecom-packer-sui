@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchpackedOrders } from "Redux-Store/PackedOrders/PackedOrderThunk";
 import { useNavigate, useLocation } from "react-router-dom";
+import HeaderCards from "../HeaderCards";
 
 const PackedOrders = () => {
   const dispatch = useDispatch();
@@ -61,46 +62,7 @@ const PackedOrders = () => {
         <SpaceBetween direction="vertical" size="xl">
           <h2 className="header_underline">Packed Orders</h2>
 
-          <div style={{ display: "flex", gap: "10px" }}>
-            <div
-              style={{
-                width: "50%",
-                backgroundColor: "#414D5CE5",
-                borderRadius: "8px",
-                paddingLeft: "20px",
-                paddingTop: "10px",
-                height: "80px",
-                cursor: "pointer",
-                boxShadow: "0px 4px 10px 0px rgba(0, 0, 0, 0.25)",
-              }}
-              onClick={() => navigate("/app/Home")}
-            >
-              <div style={{ color: "white", fontWeight: "700", fontSize: "12px" }}>
-                Unpacked Orders
-              </div>
-              <div style={{ color: "white", fontWeight: "800", fontSize: "32px" }}>
-                15
-              </div>
-            </div>
-            <div
-              style={{
-                width: "50%",
-                backgroundColor: "#0972D3",
-                borderRadius: "8px",
-                paddingLeft: "20px",
-                paddingTop: "10px",
-                cursor: "pointer",
-                height: "80px",
-              }}
-            >
-              <div style={{ color: "white", fontWeight: "700", fontSize: "12px" }}>
-                Packed Orders
-              </div>
-              <div style={{ color: "white", fontWeight: "800", fontSize: "32px" }}>
-                {Packedorders.length}
-              </div>
-            </div>
-          </div>
+        <HeaderCards/>
           {Packedorders.map((order, index) => (
             <Container key={index}>
               <SpaceBetween direction="vertical" size="xs">

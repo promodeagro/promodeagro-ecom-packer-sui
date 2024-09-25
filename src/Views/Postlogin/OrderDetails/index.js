@@ -22,7 +22,7 @@ const OrderDetails = () => {
     // Fetch order details from API
     const fetchOrderDetails = async () => {
       try {
-        const response = await fetch(`https://7fy0psdjel.execute-api.us-east-1.amazonaws.com/dev/OrderDetails/${orderId}`); // Replace with your actual API URL
+        const response = await fetch(`https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/OrderDetails/${orderId}`); // Replace with your actual API URL
         if (!response.ok) {
           throw new Error("Failed to fetch order details");
         }

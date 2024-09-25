@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "Redux-Store/Orders/OrdersThunk";
 import status from "Redux-Store/Constants";
+import HeaderCards from "../HeaderCards";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -39,46 +40,7 @@ const navigate=useNavigate()
       <SpaceBetween direction="vertical" size="xl">
         <h2 className="header_underline">Today's Orders</h2>
 
-        <div style={{ display: "flex", gap: "10px" }}>
-          <div
-            style={{
-              width: "50%",
-              backgroundColor: "#414D5CE5",
-              borderRadius: "8px",
-              paddingLeft: "20px",
-              paddingTop: "10px",
-              height: "80px",
-              boxShadow: "0px 4px 10px 0px rgba(0, 0, 0, 0.25)",
-            }}
-          >
-            <div style={{ color: "white", fontWeight: "700", fontSize: "12px" }}>
-              Unpacked Orders
-            </div>
-            <div style={{ color: "white", fontWeight: "800", fontSize: "32px" }}>
-              15
-            </div>
-          </div>
-
-          <div
-            style={{
-              width: "50%",
-              backgroundColor: "#0972D3",
-              borderRadius: "8px",
-              paddingLeft: "20px",
-              paddingTop: "10px",
-              cursor: "pointer",
-              height: "80px", // Change to pointer to show it's clickable
-            }}
-            onClick={() => navigate("/app/Orders")} // Navigate to packed orders page
-          >
-            <div style={{ color: "white", fontWeight: "700", fontSize: "12px" }}>
-              Packed Orders
-            </div>
-            <div style={{ color: "white", fontWeight: "800", fontSize: "32px" }}>
-              25
-            </div>
-          </div>
-        </div>
+      <HeaderCards/>
 
         {/* Orders List */}
         {orders && orders.length > 0 ? (
