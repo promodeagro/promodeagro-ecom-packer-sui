@@ -226,7 +226,11 @@ const Customers = () => {
               variant="icon"
               iconName="arrow-left"
             ></Button>
-            <h3 className="header_underline1">Started Order</h3>
+           
+              <Box variant="h2" margin={{bottom:"l",top:"xs"}}>
+            <span className="header_underline">Started Order</span>
+            </Box>
+         
           </div>
 
           <div className="details">

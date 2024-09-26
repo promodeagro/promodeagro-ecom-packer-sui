@@ -24,7 +24,7 @@ const ProfileDetails = () => {
    <Header variant='h3'>
     <SpaceBetween size='xs' direction='horizontal' alignItems='center' >
       <Button onClick={()=>navigate(-1)} iconName='arrow-left' variant='icon'/>
-        Profile Details
+      <span className="header_underline">Profile Details</span>
       </SpaceBetween>
    </Header>
 

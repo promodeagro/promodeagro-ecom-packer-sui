@@ -5,6 +5,7 @@ import {
   SpaceBetween,
   Badge,
   BreadcrumbGroup,
+  Box
 } from "@cloudscape-design/components";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -68,7 +69,9 @@ const OrderDetails = () => {
           variant="icon"
           iconName="arrow-left"
         />
-        <h3>View Details</h3>
+         <Box variant="h2" margin={{bottom:"l",top:"xs"}}>
+            <span className="header_underline">View Details</span>
+            </Box>
       </div>
 
       {/* Order Details */}

@@ -8,6 +8,7 @@ import {
   Flashbar,
   BreadcrumbGroup,
   ContentLayout,
+  Header
 } from "@cloudscape-design/components";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -60,7 +61,9 @@ const PackedOrders = () => {
           </Box>
         )}
         <SpaceBetween direction="vertical" size="xl">
-          <h2 className="header_underline">Packed Orders</h2>
+        <Header variant="h2">
+            <span className="header_underline">Packed Orders</span>
+            </Header>
 
         <HeaderCards/>
           {Packedorders.map((order, index) => (

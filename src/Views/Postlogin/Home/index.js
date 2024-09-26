@@ -6,6 +6,7 @@ import {
   SpaceBetween,
   Box,
   BreadcrumbGroup,
+  Header
 } from "@cloudscape-design/components";
 import ContentLayout from "@cloudscape-design/components/content-layout";
 import { useNavigate } from "react-router-dom";
@@ -38,7 +39,9 @@ const navigate=useNavigate()
       }
     >
       <SpaceBetween direction="vertical" size="xl">
-        <h2 className="header_underline">Today's Orders</h2>
+      <Header variant="h2">
+            <span className="header_underline">Today's Orders</span>
+            </Header>
 
       <HeaderCards/>
 
