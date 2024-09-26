@@ -90,37 +90,44 @@ const Customers = () => {
   }
   // Open camera
   const openCamera = async () => {
-    setHideUI(true); // Hide the rest of the UI
+    setHideUI(true);
     setIsCameraOpen(true);
+  
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" },
+      video: {
+        facingMode: "environment",
+        width: { ideal: 1280 },  // Set ideal width
+        height: { ideal: 720 },  // Set ideal height
+      },
     });
     videoRef.current.srcObject = stream;
     videoRef.current.play();
   };
+  
 
   // Take photo and show modal
   // Take photo and show modal
   const takePhoto = () => {
-    if (!canvasRef.current) return; // Ensure the canvas is rendered
-
+    if (!canvasRef.current) return;
+  
+    // Set canvas dimensions to match the video dimensions
+    const videoWidth = videoRef.current.videoWidth;
+    const videoHeight = videoRef.current.videoHeight;
+    canvasRef.current.width = videoWidth;
+    canvasRef.current.height = videoHeight;
+  
     const context = canvasRef.current.getContext("2d");
-    context.drawImage(
-      videoRef.current,
-      0,
-      0,
-      canvasRef.current.width,
-      canvasRef.current.height
-    );
+    context.drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
+  
     const dataURL = canvasRef.current.toDataURL("image/png");
     setPhoto(dataURL);
     setIsCameraOpen(false);
-    setIsModalVisible(true); // Show success modal
-    videoRef.current.srcObject.getTracks().forEach((track) => track.stop()); // Stop the video stream
-
-    // Call the POST API to upload the photo
-    // uploadPhoto(dataURL);
+    setIsModalVisible(true);
+  
+    // Stop the video stream after taking the photo
+    videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
   };
+  
 
   // Function to upload the photo to the API
   const uploadPhoto = async (photo) => {
@@ -341,11 +348,12 @@ const Customers = () => {
       {isCameraOpen && (
      
   <div style={{ position: "relative", height: "82vh" }}>
-    <video
-      ref={videoRef}
-      width="100%"
-      style={{ height: "85vh", objectFit: "cover" }}
-    />
+   <video
+  ref={videoRef}
+  width="100%"
+  style={{ height: "85vh", objectFit: "contain" }}  // Preserve aspect ratio
+/>
+
     <canvas
       ref={canvasRef}
       width="100%"
@@ -367,7 +375,7 @@ const Customers = () => {
           <img
             src={photo}
             alt="Preview"
-            style={{ width: "100%", height: "80vh" }}
+            style={{ width: "100%", height: "80vh",objectFit:"cover" }}
           />
           <div style={{ textAlign: "center" }}>
             {/* <Button variant="link" onClick={retakePhoto}>
