@@ -339,24 +339,27 @@ const Customers = () => {
       )}
       {/* Camera and Photo Handling */}
       {isCameraOpen && (
-        <div>
-          <div>
-            <video ref={videoRef} width="100%" style={{ height: "400" }} />
-            <canvas
-              ref={canvasRef}
-              width="100%"
-              height="100%"
-              style={{ display: "none" }}
-            />{" "}
-            {/* Hidden Canvas */}
-            <Box textAlign="center">
-              <Button variant="inline-link" onClick={takePhoto}>
-                Take Photo
-              </Button>
-            </Box>
-          </div>
-        </div>
-      )}
+     
+  <div style={{ position: "relative", height: "82vh" }}>
+    <video
+      ref={videoRef}
+      width="100%"
+      style={{ height: "85vh", objectFit: "cover" }}
+    />
+    <canvas
+      ref={canvasRef}
+      width="100%"
+      height="85vh"
+      style={{ display: "none" }}
+    />
+    <Box textAlign="center" position="absolute" bottom="20px" width="100%">
+      <Button variant="inline-link" onClick={takePhoto}>
+        Take Photo
+      </Button>
+    </Box>
+  </div>
+)}
+      
 
       {/* Photo Preview and Modal */}
       {photo && (
