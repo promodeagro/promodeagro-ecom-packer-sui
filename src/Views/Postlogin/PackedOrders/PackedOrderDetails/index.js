@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import {
   Container,
   Button,
@@ -13,7 +13,7 @@ import { useParams, useNavigate } from "react-router-dom";
 const OrderDetails = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
-
+ 
   // State to store order details
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -69,9 +69,9 @@ const OrderDetails = () => {
           variant="icon"
           iconName="arrow-left"
         />
-         <Box variant="h2" margin={{bottom:"l",top:"xs"}}>
-            <span className="header_underline">View Details</span>
-            </Box>
+        <Box variant="h2" margin={{ bottom: "l", top: "xs" }}>
+          <span className="header_underline">View Details</span>
+        </Box>
       </div>
 
       {/* Order Details */}
@@ -79,7 +79,6 @@ const OrderDetails = () => {
         <div className="info-row">
           <span className="label">Order ID :</span>
           <span className="value">{orderId?.slice(-7)}</span>
-
         </div>
         <div className="info-row">
           <span className="label">Customer Name :</span>
@@ -106,35 +105,33 @@ const OrderDetails = () => {
       {/* Items Display */}
       <div className="items-container">
         {ItemsList.map((item, index) => (
-          <div style={{marginBottom:"10px"}}>
-              <Container>
-          <div key={index} className="product-card">
-      
-            <div className="image-container">
-              <img
-                src={item.Images
-                }
-                alt={item.Name}
-                className="product-image"
-              />
-            </div>
-            <div className="details">
-              <div className="info-row">
-                <span className="label">Name :</span>
-                <span className="value">{item.Name}</span>
+          <div key={index} style={{ marginBottom: "10px" }}>
+            <Container>
+              <div className="product-card">
+                <div className="image-container">
+                  <img
+                    src={item.Images}
+                    alt={item.Name}
+                    className="product-image"
+                  />
+                </div>
+                <div className="details">
+                  <div className="info-row">
+                    <span className="label">Name :</span>
+                    <span className="value">{item.Name}</span>
+                  </div>
+                  <div className="info-row">
+                    <span className="label">Quantity :</span>
+                    <span className="value">{item.Quantity}</span>
+                  </div>
+                  <div className="info-row">
+                    <span className="label">Price :</span>
+                    <span className="value">₹{item.Price}</span>
+                  </div>
+                </div>
               </div>
-              <div className="info-row">
-                <span className="label">Quantity :</span>
-                <span className="value">{item.Quantity}</span>
-              </div>
-              <div className="info-row">
-                <span className="label">Price :</span>
-                <span className="value">₹{item.Price}</span>
-              </div>
-            </div>
-            </div>
             </Container>
-            </div>
+          </div>
         ))}
       </div>
 

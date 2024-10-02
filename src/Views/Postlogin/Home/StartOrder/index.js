@@ -15,37 +15,13 @@ import {
   Badge,
   Icon,
 } from "@cloudscape-design/components";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchOrderDetailsById } from "Redux-Store/PackedOrders/PackedOrderThunk"; // Import the thunk
 
 import { useNavigate, useParams } from "react-router-dom";
 
-const Customers = () => {
-  const { orderId } = useParams();
-  const navigate = useNavigate(); // Initialize navigate
-  // State to store order details
-  const [orderDetails, setOrderDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  useEffect(() => {
-    // Fetch order details from API
-    const fetchOrderDetails = async () => {
-      try {
-        const response = await fetch(
-          `https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/OrderDetails/${orderId}`
-        ); // Replace with your actual API URL
-        if (!response.ok) {
-          throw new Error("Failed to fetch order details");
-        }
-        const data = await response.json();
-        setOrderDetails(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+const StartOrder = () => {
 
-    fetchOrderDetails();
-  }, [orderId]);
 
   // State management for camera and modal
   const [isCameraOpen, setIsCameraOpen] = useState(false);
@@ -55,13 +31,19 @@ const Customers = () => {
   const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const { orderId } = useParams();
+  const navigate = useNavigate();
+
+  // State to store order details
+  const [orderDetails, setOrderDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     // Fetch order details from API
     const fetchOrderDetails = async () => {
       try {
-        const response = await fetch(
-          `https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/OrderDetails/${orderId}`
-        ); // Replace with your actual API URL
+        const response = await fetch(`https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/OrderDetails/${orderId}`); // Replace with your actual API URL
         if (!response.ok) {
           throw new Error("Failed to fetch order details");
         }
@@ -88,6 +70,9 @@ const Customers = () => {
   if (!orderDetails) {
     return <div>No order details found</div>;
   }
+
+  const { CustomerName, Payment, Price, ItemsList, CostDetails,items } = orderDetails;
+  console.log(orderDetails,"specific");
   // Open camera
   const openCamera = async () => {
     setHideUI(true);
@@ -194,11 +179,9 @@ const Customers = () => {
     putCompletePackedOrder();
 
     // Navigate to Pack Order page with submittedImage state
-    navigate("/app/Orders", { state: { image: photo } });
+    navigate("/app/PackedOrders", { state: { image: photo } });
   };
-  const { CustomerName, Payment, Price, ItemsList, CostDetails, items } =
-    orderDetails;
-  console.log(orderDetails, "specific");
+
   console.log(photo, "photo");
 
   return (
@@ -213,7 +196,7 @@ const Customers = () => {
             <BreadcrumbGroup
               items={[
                 { text: "Home", href: "/app/Home" },
-                { text: "Started Order", href: "/app/customers" },
+                { text: "Started Order", href: "/app/StartOrder" },
               ]}
               ariaLabel="Breadcrumbs"
             />
@@ -364,10 +347,17 @@ const Customers = () => {
       height="85vh"
       style={{ display: "none" }}
     />
-    <Box textAlign="center" position="absolute" bottom="20px" width="100%">
+    <Box margin={"xs"} textAlign="center" position="absolute" bottom="20px" width="100%">
       <Button variant="inline-link" onClick={takePhoto}>
         Take Photo
       </Button>
+    
+    </Box>
+    <Box  textAlign="center" position="absolute" bottom="20px" width="100%">
+     
+      <Button disabled={true} variant="primary" onClick={submitpackedorder}>
+              Complete Pack Order
+            </Button>
     </Box>
   </div>
 )}
@@ -382,9 +372,7 @@ const Customers = () => {
             style={{ width: "100%", height: "80vh",objectFit:"cover" }}
           />
           <div style={{ textAlign: "center" }}>
-            {/* <Button variant="link" onClick={retakePhoto}>
-            Retake Photo
-          </Button> */}
+         
             <Button variant="primary" onClick={submitpackedorder}>
               Complete Pack Order
             </Button>
@@ -425,5 +413,5 @@ const Customers = () => {
   );
 };
 
-export default Customers;
+export default StartOrder;
 

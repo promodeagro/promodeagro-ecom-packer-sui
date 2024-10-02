@@ -31,7 +31,7 @@ const packedOrdersSlice = createSlice({
         state.ordersData.error = action.error.message;
       });
 
-    // Handling fetching a specific order by ID
+    // Handling fetching order details by ID
     builder
       .addCase(fetchOrderDetailsById.pending, (state) => {
         state.orderDetails.status = 'loading';

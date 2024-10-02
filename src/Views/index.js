@@ -3,15 +3,15 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { PREFIX_APP_PATH, PREFIX_AUTH_PATH } from "./../Config/Config";
 
 // import SalesAndReport from "./Postlogin/salesAndReport";
-import OrderDetails from "./Postlogin/OrderDetails";
+import OrderDetails from "./Postlogin/PackedOrders/PackedOrderDetails";
 import CreateNewPassword from "./PreLogin/CreateNewPassword";
 import  Notifications  from "./Postlogin/Notifications/index";
 import ProfileDetails from "./Postlogin/ProfileDetails";
 import OtpVerification from "./PreLogin/OtpVerification";
 const Home = lazy(() => import("./Postlogin/Home"));
-const StartOrders = lazy(() => import("./Postlogin/StartOrder"));
+const StartOrders = lazy(() => import("./Postlogin/Home/StartOrder"));
 
-const Orders = lazy(() => import("./Postlogin/Orders"));
+const Orders = lazy(() => import("./Postlogin/PackedOrders"));
 
 
 
@@ -42,7 +42,7 @@ const Views = () => {
           /> */}
           <Route
             exact
-            path={`${PREFIX_APP_PATH}/OrderDetails/:orderId`}
+            path={`${PREFIX_APP_PATH}/PackedOrders/PackedOrderDetails/:orderId`}
             element={<OrderDetails/>}
           />
           <Route
@@ -59,7 +59,7 @@ const Views = () => {
        
           <Route
             exact
-            path={`${PREFIX_APP_PATH}/Orders`}
+            path={`${PREFIX_APP_PATH}/PackedOrders`}
             element={<Orders />}
           />
         

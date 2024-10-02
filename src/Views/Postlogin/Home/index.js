@@ -15,7 +15,7 @@ import { fetchOrders } from "Redux-Store/Orders/OrdersThunk";
 import status from "Redux-Store/Constants";
 import HeaderCards from "../HeaderCards";
 
-const Dashboard = () => {
+const Home = () => {
   const dispatch = useDispatch();
   const ordersData = useSelector((state) => state.orders.ordersData);
   const orders = ordersData?.data?.UnpackedOrders
@@ -33,7 +33,7 @@ const navigate=useNavigate()
       headerVariant="high-contrast"
       breadcrumbs={
         <BreadcrumbGroup
-          items={[{ text: "Home", href: "/app/dashboard" }]}
+          items={[{ text: "Home", href: "/app/Home" }]}
           ariaLabel="Breadcrumbs"
         />
       }
@@ -97,7 +97,7 @@ const navigate=useNavigate()
   );
 };
 
-export default Dashboard;
+export default Home;
 
 
 

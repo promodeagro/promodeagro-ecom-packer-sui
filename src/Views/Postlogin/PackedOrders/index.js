@@ -10,10 +10,9 @@ import {
   ContentLayout,
   Header
 } from "@cloudscape-design/components";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchpackedOrders } from "Redux-Store/PackedOrders/PackedOrderThunk";
-import { useNavigate, useLocation } from "react-router-dom";
 import HeaderCards from "../HeaderCards";
 
 const PackedOrders = () => {
@@ -40,6 +39,17 @@ const PackedOrders = () => {
     },
   ];
 
+  // Set timeout to automatically dismiss the flashbar after 5 seconds
+  useEffect(() => {
+    if (isFlashVisible) {
+      const timer = setTimeout(() => {
+        setIsFlashVisible(false);
+      }, 5000); // 5 seconds
+
+      return () => clearTimeout(timer); // Clear the timeout if the component unmounts or if flash is dismissed
+    }
+  }, [isFlashVisible]);
+
   return (
     <>
       <ContentLayout
@@ -48,8 +58,8 @@ const PackedOrders = () => {
         breadcrumbs={
           <BreadcrumbGroup
             items={[
-              { text: "Home", href: "/app/dashboard" },
-              { text: "Packed Orders", href: "/app/Orders" },
+              { text: "Home", href: "/app/Home" },
+              { text: "Packed Orders", href: "/app/PackedOrders" },
             ]}
             ariaLabel="Breadcrumbs"
           />
@@ -61,11 +71,11 @@ const PackedOrders = () => {
           </Box>
         )}
         <SpaceBetween direction="vertical" size="xl">
-        <Header variant="h2">
+          <Header variant="h2">
             <span className="header_underline">Packed Orders</span>
-            </Header>
+          </Header>
 
-        <HeaderCards/>
+          <HeaderCards />
           {Packedorders.map((order, index) => (
             <Container key={index}>
               <SpaceBetween direction="vertical" size="xs">
@@ -90,7 +100,7 @@ const PackedOrders = () => {
                 <Button
                   variant="primary"
                   fullWidth
-                  onClick={() => navigate(`/app/OrderDetails/${order.OrderId}`)}
+                  onClick={() => navigate(`/app/PackedOrders/PackedOrderDetails/${order.OrderId}`)}
                 >
                   View Details
                 </Button>

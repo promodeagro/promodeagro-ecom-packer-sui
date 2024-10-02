@@ -6,7 +6,7 @@ import { Badge, Box, Button,Icon } from "@cloudscape-design/components";
 import { authSignOut } from "Redux-Store/authenticate/signout/signoutThunk";
 const pages = [
   { type: "link", text: "Home", href: "/app/Home" },
-  { type: "link", text: "Packed Orders", href: "/app/Orders" },
+  { type: "link", text: "Packed Orders", href: "/app/PackedOrders" },
   { type: "link", text: "Profile Details", href: "/app/ProfileDetails" },
   { type: "divider" },
   {
