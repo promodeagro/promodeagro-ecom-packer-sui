@@ -14,6 +14,7 @@ import {
   ColumnLayout,
   Badge,
   Icon,
+  Spinner,
 } from "@cloudscape-design/components";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrderDetailsById } from "Redux-Store/PackedOrders/PackedOrderThunk"; // Import the thunk
@@ -24,6 +25,7 @@ const StartOrder = () => {
 
 
   // State management for camera and modal
+  const [isUploading, setIsUploading] = useState(false); // State to show the spinner during upload
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [photo, setPhoto] = useState(null);
   const [submittedImage, setSubmittedImage] = useState(null);
@@ -90,63 +92,69 @@ const StartOrder = () => {
   };
   
 
-  // Take photo and show modal
-  // Take photo and show modal
-  const takePhoto = () => {
-    if (!canvasRef.current) return;
-  
-    // Set canvas dimensions to match the video dimensions
-    const videoWidth = videoRef.current.videoWidth;
-    const videoHeight = videoRef.current.videoHeight;
-    canvasRef.current.width = videoWidth;
-    canvasRef.current.height = videoHeight;
-  
-    const context = canvasRef.current.getContext("2d");
-    context.drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
-  
-    const dataURL = canvasRef.current.toDataURL("image/png");
-    setPhoto(dataURL);
-    setIsCameraOpen(false);
-    setIsModalVisible(true);
-  
-    // Stop the video stream after taking the photo
-    videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
-  };
-  
+// Function to take photo, compress it, and show modal
+const takePhoto = () => {
+  if (!canvasRef.current) return;
 
-  // Function to upload the photo to the API
-  const uploadPhoto = async (photo) => {
-    try {
-      const response = await fetch(
-        `https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/orders/${orderId}/upload-photo`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ data: photo }), // Send the photo in the request body
-        }
-      );
+  // Get video dimensions
+  const videoWidth = videoRef.current.videoWidth;
+  const videoHeight = videoRef.current.videoHeight;
 
-      if (!response.ok) {
-        throw new Error("Failed to upload photo");
+  // Set the canvas size to a smaller size for compression (reduce dimensions)
+  const targetWidth = 800;  // Example compressed width
+  const scaleFactor = targetWidth / videoWidth;
+  const targetHeight = videoHeight * scaleFactor;  // Maintain aspect ratio
+
+  canvasRef.current.width = targetWidth;
+  canvasRef.current.height = targetHeight;
+
+  const context = canvasRef.current.getContext("2d");
+  context.drawImage(videoRef.current, 0, 0, targetWidth, targetHeight);
+
+  // Convert the canvas to a compressed base64 image (JPEG with quality of 0.7)
+  const compressedDataURL = canvasRef.current.toDataURL("image/jpeg", 0.7);  // 70% quality
+  setPhoto(compressedDataURL);  // Save the photo
+  setIsCameraOpen(false);  // Close the camera
+  uploadPhoto(compressedDataURL);  // Upload the compressed photo
+
+  // Stop the video stream after taking the photo
+  videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
+};
+
+ // Function to upload the photo to the API
+ const uploadPhoto = async (photo) => {
+  setIsUploading(true); // Show the spinner
+  try {
+    const response = await fetch(
+      `https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/orders/${orderId}/upload-photo`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data: photo }), // Send the photo in the request body
       }
+    );
 
-      const responseData = await response.json(); // Parse the response body as JSON
-      console.log("Photo uploaded successfully:", responseData); // Log the response data
-    } catch (error) {
-      console.error("Error uploading photo:", error.message);
+    if (!response.ok) {
+      throw new Error("Failed to upload photo");
     }
-    setIsModalVisible(false);
-    console.log("Confirmed");
-  };
 
-  // Retake photo
-  const retakePhoto = () => {
-    setIsModalVisible(false); // Hide the success modal
-    setPhoto(null);
-    openCamera();
-  };
+    const responseData = await response.json();
+    console.log("Photo uploaded successfully:", responseData);
+    setIsModalVisible(true);
+      // Automatically close the modal after 2 seconds
+      setTimeout(() => {
+        setIsModalVisible(false);
+      }, 3000);
+  } catch (error) {
+    console.error("Error uploading photo:", error.message);
+  } finally {
+    setIsUploading(false); // Hide the spinner after the upload completes
+  }
+};
+
+
 
   // PUT API call to complete packing the order
   const putCompletePackedOrder = async () => {
@@ -182,7 +190,7 @@ const StartOrder = () => {
     navigate("/app/PackedOrders", { state: { image: photo } });
   };
 
-  console.log(photo, "photo");
+ 
 
   return (
     <>
@@ -363,20 +371,30 @@ const StartOrder = () => {
 )}
       
 
-      {/* Photo Preview and Modal */}
       {photo && (
         <div style={{ position: "relative" }}>
-          <img
-            src={photo}
-            alt="Preview"
-            style={{ width: "100%", height: "80vh",objectFit:"cover" }}
-          />
+          <img src={photo} alt="Preview" style={{ width: "100%", height: "80vh", objectFit: "cover" }} />
           <div style={{ textAlign: "center" }}>
-         
-            <Button variant="primary" onClick={submitpackedorder}>
-              Complete Pack Order
-            </Button>
+            {/* Show spinner if uploading */}
+            {isUploading ? (
+             <div
+             style={{
+               position: "absolute",
+               top: "50%",
+               left: "50%",
+               transform: "translate(-50%, -50%)",
+               zIndex: 1,
+             }}
+           >
+             <Spinner size="large" />
+           </div>// Show spinner when uploading
+            ) : (
+              <Button variant="primary" onClick={submitpackedorder}>
+                Complete Pack Order
+              </Button>
+            )}
           </div>
+          
 
           {/* Modal - Display success message */}
 
@@ -385,22 +403,7 @@ const StartOrder = () => {
             size="small"
             onDismiss={() => setIsModalVisible(false)}
             closeAriaLabel="Close modal"
-            footer={
-              <div
-                style={{
-                  display: "flex",
-                  gap: "20px",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <Button variant="inline-link" onClick={retakePhoto}>
-                  Retake
-                </Button>
-                <Button variant="primary" onClick={() => uploadPhoto(photo)}>
-                  Confirm
-                </Button>
-              </div>
-            }
+        
           >
             <div style={{ color: "green", textAlign: "center" }}>
               <Icon name="status-positive" size="large" />

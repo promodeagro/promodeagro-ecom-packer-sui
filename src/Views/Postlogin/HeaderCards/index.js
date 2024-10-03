@@ -9,15 +9,15 @@ const HeaderCards = () => {
     const navigate=useNavigate()
     const dispatch = useDispatch();
     const ordersData = useSelector((state) => state.orders.ordersData);
-    const unpackorders = ordersData?.data?.UnpackedOrders
+    const unpackorders = ordersData?.data
     console.log(unpackorders,"order from Ui");
     useEffect(() => {
       dispatch(fetchOrders());
     }, [dispatch]);
  
     const packedData = useSelector((state) => state.Packedorders?.ordersData);
-    const Packedorders = packedData?.data?.PackedOrders || [];
-    console.log(Packedorders,"packed order");
+    const Packedorders = packedData?.data || [];
+    // console.log(Packedorders,"packed order");
   
     useEffect(() => {
       dispatch(fetchpackedOrders());
@@ -40,7 +40,7 @@ const HeaderCards = () => {
         Unpacked Orders
       </div>
       <div style={{ color: "white", fontWeight: "800", fontSize: "32px" }}>
-        {unpackorders?.length}
+        {unpackorders?.TotalUnpackedOrders}
       </div>
     </div>
 
@@ -60,7 +60,7 @@ const HeaderCards = () => {
         Packed Orders
       </div>
       <div style={{ color: "white", fontWeight: "800", fontSize: "32px" }}>
-        {Packedorders?.length}
+        {Packedorders?.TotalPackedOrders}
       </div>
     </div>
   </div>
