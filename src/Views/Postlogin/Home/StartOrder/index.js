@@ -355,7 +355,7 @@ const takePhoto = () => {
       height="85vh"
       style={{ display: "none" }}
     />
-    <Box margin={"xs"} textAlign="center" position="absolute" bottom="20px" width="100%">
+    <Box margin={{bottom:"xs"}} textAlign="center" position="absolute" bottom="20px" width="100%">
       <Button variant="inline-link" onClick={takePhoto}>
         Take Photo
       </Button>
@@ -386,7 +386,7 @@ const takePhoto = () => {
                zIndex: 1,
              }}
            >
-             <Spinner size="large" />
+             <Spinner  size="large" />
            </div>// Show spinner when uploading
             ) : (
               <Button variant="primary" onClick={submitpackedorder}>

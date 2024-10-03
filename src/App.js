@@ -22,18 +22,7 @@ function MainLayout() {
     <>
       {isAuthRoute && (
         <>
-          <img 
-            src={PTRLogo} // Replace with your image path or URL
-            alt="Auth Route Logo"
-            style={{
-              position: "absolute",
-              top: "10px",
-              left: "10px",
-              width: "180px", // Adjust size as needed
-              height: "auto",
-              zIndex: 10
-            }}
-          />
+        
           <div
             style={{
               position: "absolute",
