@@ -23,6 +23,7 @@ const OrderDetails = () => {
     // Fetch order details from API
     const fetchOrderDetails = async () => {
       try {
+        // now  have to fetched from frontend
         const response = await fetch(`https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/OrderDetails/${orderId}`); // Replace with your actual API URL
         if (!response.ok) {
           throw new Error("Failed to fetch order details");

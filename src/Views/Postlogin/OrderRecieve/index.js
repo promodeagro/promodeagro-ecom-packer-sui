@@ -1,6 +1,6 @@
 import React from 'react';
 // import './OrderCard.css'; // Create a CSS file for custom styles
-
+// this for global not in used now 
 function OrderCard() {
   return (
     <div className="order-card-wrapper">
