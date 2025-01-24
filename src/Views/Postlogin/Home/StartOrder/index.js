@@ -9,20 +9,16 @@ import {
   ContentLayout,
   BreadcrumbGroup,
   Modal,
-  StatusIndicator,
-  Grid,
-  ColumnLayout,
   Badge,
   Icon,
   Spinner,
 } from "@cloudscape-design/components";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchOrderDetailsById } from "Redux-Store/PackedOrders/PackedOrderThunk"; // Import the thunk
-
-import { useNavigate, useParams } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 const StartOrder = () => {
-
+  const location = useLocation();
+  const { orderDetails } = location.state || {};
+  console.log(orderDetails, "order details");
 
   // State management for camera and modal
   const [isUploading, setIsUploading] = useState(false); // State to show the spinner during upload
@@ -33,164 +29,140 @@ const StartOrder = () => {
   const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const { orderId } = useParams();
+
   const navigate = useNavigate();
 
-  // State to store order details
-  const [orderDetails, setOrderDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    // Fetch order details from API
-    const fetchOrderDetails = async () => {
-      try {
-        const response = await fetch(`https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/OrderDetails/${orderId}`); // Replace with your actual API URL
-        if (!response.ok) {
-          throw new Error("Failed to fetch order details");
-        }
-        const data = await response.json();
-        setOrderDetails(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrderDetails();
-  }, [orderId]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (!orderDetails) {
-    return <div>No order details found</div>;
-  }
-
-  const { CustomerName, Payment, Price, ItemsList, CostDetails,items } = orderDetails;
-  console.log(orderDetails,"specific");
   // Open camera
   const openCamera = async () => {
     setHideUI(true);
     setIsCameraOpen(true);
-  
+
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {
         facingMode: "environment",
-        width: { ideal: 1280 },  // Set ideal width
-        height: { ideal: 720 },  // Set ideal height
+        width: { ideal: 1280 }, // Set ideal width
+        height: { ideal: 720 }, // Set ideal height
       },
     });
     videoRef.current.srcObject = stream;
     videoRef.current.play();
   };
-  
 
-// Function to take photo, compress it, and show modal
-const takePhoto = () => {
-  if (!canvasRef.current) return;
+ // Capture photo
+ const takePhoto = () => {
+  if (!canvasRef.current || !videoRef.current) return;
 
-  // Get video dimensions
+  const context = canvasRef.current.getContext("2d");
   const videoWidth = videoRef.current.videoWidth;
   const videoHeight = videoRef.current.videoHeight;
 
-  // Set the canvas size to a smaller size for compression (reduce dimensions)
-  const targetWidth = 800;  // Example compressed width
-  const scaleFactor = targetWidth / videoWidth;
-  const targetHeight = videoHeight * scaleFactor;  // Maintain aspect ratio
+  canvasRef.current.width = videoWidth;
+  canvasRef.current.height = videoHeight;
+  context.drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
 
-  canvasRef.current.width = targetWidth;
-  canvasRef.current.height = targetHeight;
+  const imageData = canvasRef.current.toDataURL("image/jpeg", 0.7);
+  setPhoto(imageData);
 
-  const context = canvasRef.current.getContext("2d");
-  context.drawImage(videoRef.current, 0, 0, targetWidth, targetHeight);
-
-  // Convert the canvas to a compressed base64 image (JPEG with quality of 0.7)
-  const compressedDataURL = canvasRef.current.toDataURL("image/jpeg", 0.7);  // 70% quality
-  setPhoto(compressedDataURL);  // Save the photo
-  setIsCameraOpen(false);  // Close the camera
-  uploadPhoto(compressedDataURL);  // Upload the compressed photo
-
-  // Stop the video stream after taking the photo
+  // Stop camera
   videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
+  setIsCameraOpen(false);
 };
 
- // Function to upload the photo to the API
- const uploadPhoto = async (photo) => {
-  setIsUploading(true); // Show the spinner
-  try {
-    const response = await fetch(
-      `https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/orders/${orderId}/upload-photo`,
+// Upload photo to S3 and pack order
+const submitPackedOrder = async () => {
+  if (!photo || !orderDetails?.id) {
+    console.error("Missing photo or order ID");
+    return;
+  }
+  const user = JSON.parse(localStorage.getItem("user")); // Retrieve and parse 'user' object from local storage
+  // const jwtToken = user?.accessToken; 
+  const token = user?.accessToken;
+
+
+  // setIsUploading(true);
+  // try {
+  //   // Step 1: Get S3 upload URL
+  //   const uploadResponse = await fetch(
+  //     "https://bytud12spg.execute-api.ap-south-1.amazonaws.com/packer/6679942e-ab1e-4de1-8b1b-382a3ed9a044/uploadUrl",
+  //     {
+  //       method: "GET",
+  //       headers: {
+  //         Authorization: `${token}`, // Replace with actual token if required
+  //       },
+  //     }
+  //   );
+  //   console.log(uploadResponse,"response");
+
+  //   if (!uploadResponse.ok) {
+  //     throw new Error("Failed to get upload URL");
+  //   }
+
+  //   const { uploadUrl } = await uploadResponse.json();
+  //   console.log("S3 Upload URL:", uploadUrl);
+
+  //   // Step 2: Upload image to S3
+  //   const imageBlob = await fetch(photo).then((res) => res.blob());
+  //   const s3UploadResponse = await fetch(uploadUrl, {
+  //     method: "PUT",
+  //     headers: { "Content-Type": "image/jpeg" },
+  //     body: imageBlob,
+  //   });
+
+  //   if (!s3UploadResponse.ok) {
+  //     throw new Error("Failed to upload image to S3");
+  //   }
+
+  //   console.log("Image uploaded successfully to S3");
+
+    // Step 3: Pack the order
+    const packOrderResponse = await fetch(
+      `https://bytud12spg.execute-api.ap-south-1.amazonaws.com/packer/order/${orderDetails.id}`,
       {
-        method: "POST",
+        method: "PATCH",
         headers: {
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Replace with actual token if required
         },
-        body: JSON.stringify({ data: photo }), // Send the photo in the request body
+     
+        body: JSON.stringify({ action: "pack", image: "https://example.com/image.jpg" }),
       }
     );
 
-    if (!response.ok) {
-      throw new Error("Failed to upload photo");
+    if (!packOrderResponse.ok) {
+      const errorData = await packOrderResponse.json();
+      throw new Error(errorData.message || "Failed to pack order");
     }
 
-    const responseData = await response.json();
-    console.log("Photo uploaded successfully:", responseData);
+    const packOrderData = await packOrderResponse.json();
+    console.log("Order Packed Successfully:", packOrderData);
+
     setIsModalVisible(true);
-      // Automatically close the modal after 2 seconds
-      setTimeout(() => {
-        setIsModalVisible(false);
-      }, 3000);
-  } catch (error) {
-    console.error("Error uploading photo:", error.message);
-  } finally {
-    setIsUploading(false); // Hide the spinner after the upload completes
+    setTimeout(() => {
+      setIsModalVisible(false);
+      navigate("/app/Home", { state: { image: photo } });
+    }, 3000);
   }
-};
+  //  catch (error) {
+  //   console.error("Error in submitting packed order:", error.message);
+  // }
+  //  finally {
+  //   setIsUploading(false);
+  // }
+// };
+  if (!orderDetails) {
+    return <div>No order details found</div>;
+  }
 
-
-
-  // PUT API call to complete packing the order
-  const putCompletePackedOrder = async () => {
-    try {
-      const response = await fetch(
-        `https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/orders/${orderId}/CompletePacked`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ Status: "Packed" }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to complete packing the order");
-      }
-      const data = await response.json();
-      console.log("Order status updated successfully:", data);
-    } catch (error) {
-      console.error("Error updating order status:", error.message);
-    }
-  };
-
-  // Submit photo and navigate to Pack Order page
-  const submitpackedorder = () => {
-    setSubmittedImage(photo);
-    setPhoto(null);
-    setHideUI(false); // Show the UI back after submitting the photo
-    putCompletePackedOrder();
-
-    // Navigate to Pack Order page with submittedImage state
-    navigate("/app/PackedOrders", { state: { image: photo } });
-  };
-
- 
+  const {
+    id: orderId,
+    totalPrice,
+    paymentDetails,
+    items,
+    subTotal,
+    deliveryCharges,
+    tax,
+    totalSavings,
+    deliverySlot,
+  } = orderDetails;
 
   return (
     <>
@@ -217,75 +189,79 @@ const takePhoto = () => {
               variant="icon"
               iconName="arrow-left"
             ></Button>
-           
-              <Box variant="h2" margin={{bottom:"l",top:"xs"}}>
-            <span className="header_underline">Started Order</span>
+            <Box variant="h2" margin={{ bottom: "l", top: "xs" }}>
+              <span className="header_underline">Started Order</span>
             </Box>
-         
           </div>
 
+          {/* Order Details */}
           <div className="details">
             <div className="info-row">
-              <span className="value">Order ID :</span>
-              <span className="value">{orderId?.slice(-7)}</span>
+              <span className="label">Order ID:</span>
+              {/* <span className="value">{orderId?.slice(-7)}</span> */}
+              <span className="value">{orderId}</span>
+
             </div>
             <div className="info-row">
-              <span className="label">Customer Name :</span>
-              <span className="value">{CustomerName}</span>
+              <span className="label">Payment:</span>
+              <span className="value">{paymentDetails?.method}</span>
             </div>
             <div className="info-row">
-              <span className="label">Payment :</span>
-              <span className="value">{Payment.method}</span>
+              <span className="label">Price:</span>
+              <span className="value">₹{totalPrice}</span>
             </div>
             <div className="info-row">
-              <span className="label">Price :</span>
-              <span className="value">₹{Price}</span>
+              <span className="label">Delivery Slot:</span>
+              <span className="value">
+                {deliverySlot?.startTime} - {deliverySlot?.endTime}
+              </span>
             </div>
             <div className="items-list">
               <span className="items-label">
-                Items list <span className="items-count">({items} Items)</span>
+                Items List{" "}
+                <span className="items-count">({items.length} Items)</span>
               </span>
-              {/* <button className="unpacked-btn"> */}
-              <Badge> Unpacked Order</Badge>
-              {/* </button> */}
+              <Badge>Unpacked Order</Badge>
             </div>
           </div>
           <hr />
 
-           {/* Items Display */}
-      <div className="items-container">
-        {ItemsList.map((item, index) => (
-          <div style={{marginBottom:"10px"}}>
-          <Container>
-          <div key={index} className="product-card">
-      
-            <div className="image-container">
-              <img
-                src={item.Images
-                }
-                alt={item.Name}
-                className="product-image"
-              />
-            </div>
-            <div className="details">
-              <div className="info-row">
-                <span className="label">Name:</span>
-                <span className="value">{item.Name}</span>
-              </div>
-              <div className="info-row">
-                <span className="label">Quantity:</span>
-                <span className="value">{item.Quantity}</span>
-              </div>
-              <div className="info-row">
-                <span className="label">Price:</span>
-                <span className="value">₹{item.Price}</span>
-              </div>
-            </div>
-            </div>
-            </Container>
-            </div>
-        ))}
-      </div>
+          {/* Items Display */}
+          <div className="items-container">
+            {items.map((item, index) => (
+              
+              // <Container style={{marginBottom:'10px'}} key={index}>
+                <div  key={index} className="product-card">
+                  <img src={item.productImage}  alt="product" height={60} width={55}></img>
+                  <div
+  style={{
+    width: "1px", // Width of the line
+    height: "110px", // Height of the line
+    backgroundColor: "gray", // Line color
+    margin: "0 auto", // Optional: Center the line horizontally
+  }}
+></div>
+
+                  <div className="details">
+                    <div className="info-row">
+                      <span className="label">Name:</span>
+                      <span className="value">{item.productName}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="label">Quantity:</span>
+                      <span className="value">
+                        {item.quantity} {item.unit}
+                      </span>
+                    </div>
+                    <div className="info-row">
+                      <span className="label">Price:</span>
+                      <span className="value">₹{item.price}</span>
+                    </div>
+                  </div>
+                </div>
+              // </Container>
+            ))}
+          </div>
 
           {/* Cost Details Section */}
           <h3>Cost Details</h3>
@@ -295,20 +271,26 @@ const takePhoto = () => {
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <span>Sub Total :</span>
-                  <strong>₹{CostDetails.SubTotal}</strong>
+                  <span>Sub Total:</span>
+                  <strong>₹{subTotal}</strong>
                 </div>
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <span>Shipping Charges :</span>
-                  <strong>₹{CostDetails.ShippingCharges}</strong>
+                  <span>Shipping Charges:</span>
+                  <strong>₹{deliveryCharges}</strong>
                 </div>
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <span>Gross Amount :</span>
-                  <strong>₹{CostDetails.GrossDetails}</strong>
+                  <span>Tax:</span>
+                  <strong>₹{tax}</strong>
+                </div>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <span>Total Savings:</span>
+                  <strong>₹{totalSavings}</strong>
                 </div>
               </SpaceBetween>
               <hr />
@@ -317,17 +299,14 @@ const takePhoto = () => {
                   display: "flex",
                   justifyContent: "space-between",
                   fontWeight: "bold",
-                  alignItems: "center",
-                  alignContent: "center",
                 }}
               >
-                <span>Total Amount :</span>
-                <span>₹{CostDetails.TotalAmount}</span>
+                <span>Total Amount:</span>
+                <span>₹{totalPrice}</span>
               </div>
             </Container>
 
             {/* Pack Order Button */}
-
             <Button
               variant="primary"
               fullWidth
@@ -341,60 +320,74 @@ const takePhoto = () => {
       )}
       {/* Camera and Photo Handling */}
       {isCameraOpen && (
-     
-  <div style={{ position: "relative", height: "82vh" }}>
-   <video
-  ref={videoRef}
-  width="100%"
-  style={{ height: "85vh", objectFit: "contain" }}  // Preserve aspect ratio
-/>
+        <div style={{ position: "relative", height: "82vh" }}>
+          <video
+            ref={videoRef}
+            width="100%"
+            style={{ height: "85vh", objectFit: "contain" }} // Preserve aspect ratio
+          />
 
-    <canvas
-      ref={canvasRef}
-      width="100%"
-      height="85vh"
-      style={{ display: "none" }}
-    />
-    <Box margin={{bottom:"xs"}} textAlign="center" position="absolute" bottom="20px" width="100%">
-      <Button variant="inline-link" onClick={takePhoto}>
-        Take Photo
-      </Button>
-    
-    </Box>
-    <Box  textAlign="center" position="absolute" bottom="20px" width="100%">
-     
-      <Button disabled={true} variant="primary" onClick={submitpackedorder}>
+          <canvas
+            ref={canvasRef}
+            width="100%"
+            height="85vh"
+            style={{ display: "none" }}
+          />
+          <Box
+            margin={{ bottom: "xs" }}
+            textAlign="center"
+            position="absolute"
+            bottom="20px"
+            width="100%"
+          >
+            <Button variant="inline-link" onClick={takePhoto}>
+              Take Photo
+            </Button>
+          </Box>
+          <Box
+            textAlign="center"
+            position="absolute"
+            bottom="20px"
+            width="100%"
+          >
+            <Button
+              disabled={true}
+              variant="primary"
+              onClick={submitPackedOrder}
+            >
               Complete Pack Order
             </Button>
-    </Box>
-  </div>
-)}
-      
+          </Box>
+        </div>
+      )}
 
       {photo && (
         <div style={{ position: "relative" }}>
-          <img src={photo} alt="Preview" style={{ width: "100%", height: "80vh", objectFit: "cover" }} />
+          <img
+            src={photo}
+            alt="Preview"
+            style={{ width: "100%", height: "80vh", objectFit: "cover" }}
+          />
           <div style={{ textAlign: "center" }}>
             {/* Show spinner if uploading */}
             {isUploading ? (
-             <div
-             style={{
-               position: "absolute",
-               top: "50%",
-               left: "50%",
-               transform: "translate(-50%, -50%)",
-               zIndex: 1,
-             }}
-           >
-             <Spinner  size="large" />
-           </div>// Show spinner when uploading
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  zIndex: 1,
+                }}
+              >
+                <Spinner size="large" />
+              </div> // Show spinner when uploading
             ) : (
-              <Button variant="primary" onClick={submitpackedorder}>
+              <Button variant="primary" onClick={submitPackedOrder}>
                 Complete Pack Order
               </Button>
             )}
           </div>
-          
 
           {/* Modal - Display success message */}
 
@@ -403,7 +396,6 @@ const takePhoto = () => {
             size="small"
             onDismiss={() => setIsModalVisible(false)}
             closeAriaLabel="Close modal"
-        
           >
             <div style={{ color: "green", textAlign: "center" }}>
               <Icon name="status-positive" size="large" />

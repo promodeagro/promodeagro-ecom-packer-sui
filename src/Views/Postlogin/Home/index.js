@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Container,
@@ -6,26 +6,62 @@ import {
   SpaceBetween,
   Box,
   BreadcrumbGroup,
-  Header
+  Header,
 } from "@cloudscape-design/components";
 import ContentLayout from "@cloudscape-design/components/content-layout";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchOrders } from "Redux-Store/Orders/OrdersThunk";
-import status from "Redux-Store/Constants";
-import HeaderCards from "../HeaderCards";
+// import HeaderCards from "../HeaderCards";
+import axios from "axios";
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const ordersData = useSelector((state) => state.orders.ordersData);
-  const orders = ordersData?.data?.UnpackedOrders
-  console.log(orders,"order from Ui");
-  useEffect(() => {
-    dispatch(fetchOrders());
-  }, [dispatch]);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-   
-const navigate=useNavigate()
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        // Retrieve the access token from local storage
+        const user = JSON.parse(localStorage.getItem("user"));
+        const token = user?.accessToken;
+
+        if (!token) {
+          throw new Error("Authorization token is missing.");
+        }
+
+        // Make the API request
+        const response = await axios.get(
+          "https://bytud12spg.execute-api.ap-south-1.amazonaws.com/packer/order/6679942e-ab1e-4de1-8b1b-382a3ed9a044",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response,"ordersss");
+
+        setOrders(response.data || []);
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+        setError(err.message || "Failed to fetch orders.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+  console.log(orders,"orderss");
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <ContentLayout
@@ -39,11 +75,11 @@ const navigate=useNavigate()
       }
     >
       <SpaceBetween direction="vertical" size="xl">
-      <Header variant="h2">
-            <span className="header_underline">Today's Orders</span>
-            </Header>
+        <Header variant="h2">
+          <span className="header_underline">Today's Orders</span>
+        </Header>
 
-      <HeaderCards/>
+     
 
         {/* Orders List */}
         {orders && orders.length > 0 ? (
@@ -57,19 +93,39 @@ const navigate=useNavigate()
                       justifyContent: "space-between",
                     }}
                   >
-                    <strong>Order ID: {order.OrderId?.slice(-7)}</strong>
-                    <Badge>{order?.OrderStatus === "order placed" ? "Unpacked" : ""}</Badge>
-
+                    <strong>Order ID: {order?.id}</strong>
+                    <Badge>
+                      Unpacked
+                    </Badge>
                   </div>
+
                   <SpaceBetween direction="vertical" size="s">
                     <div className="customer-info">
                       <div className="info-row">
                         <span className="label">Customer Name :</span>
-                        <span className="name">{order?.CustomerName}</span>
+                        <span className="name">
+                          {order?.paymentDetails?.paymentLink?.customer_details
+                            ?.customer_name || "N/A"}
+                        </span>
                       </div>
                       <div className="info-row">
                         <span className="label">Total Items :</span>
-                        <span className="items">{order?.TotalItems}Items</span>
+                        <span className="items">
+                          {order?.items?.length} Items
+                        </span>
+                      </div>
+                      <div className="info-row">
+                        <span className="label">Total Price :</span>
+                        <span className="price">
+                          ₹{order?.totalPrice || "0.00"}
+                        </span>
+                      </div>
+                      <div className="info-row">
+                        <span className="label">Delivery Slot :</span>
+                        <span className="slot">
+                          {order?.deliverySlot?.startTime || "N/A"} -{" "}
+                          {order?.deliverySlot?.endTime || "N/A"}
+                        </span>
                       </div>
                     </div>
                   </SpaceBetween>
@@ -80,9 +136,11 @@ const navigate=useNavigate()
                 <Button
                   variant="primary"
                   fullWidth
-                  onClick={() => navigate(`/app/Home/StartOrder/${order?.OrderId}`)}
-                  // disabled={orderStatus === status.IN_PROGRESS}
-                   // Disable if loading
+                  onClick={() =>
+                    navigate(`/app/Home/StartOrder`, {
+                      state: { orderDetails: order },
+                    })
+                  }
                 >
                   Start Order
                 </Button>
@@ -98,7 +156,3 @@ const navigate=useNavigate()
 };
 
 export default Home;
-
-
-
-

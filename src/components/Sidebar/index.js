@@ -32,7 +32,8 @@ const Sidebar = () => {
       try {
         const parsedUserData = JSON.parse(userData);
         console.log("parsed", parsedUserData.accessToken);
-        const token = parsedUserData.accessToken;
+        // const token = parsedUserData.accessToken;
+       const token="eyJraWQiOiIyUEsySUZRM3o4VGZjOFQrR0w4WFFOMmY0cDljRXpReEZRMFdwNUZLdDVVPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJjMTUzYWQ5YS1iMGIxLTcwZjUtOTYwNS0xMTZkYmJhNjMyMjMiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuYXAtc291dGgtMS5hbWF6b25hd3MuY29tXC9hcC1zb3V0aC0xX2VRQWlkVWVuciIsImNsaWVudF9pZCI6IjFiMjVzYTRvNHFvN3VtN2ZubWI2ZGlhZTU4Iiwib3JpZ2luX2p0aSI6ImNmNTc0NDI4LTUyZjItNDI0MS04NDk1LTUwYzY5ZTM4MWExZiIsImV2ZW50X2lkIjoiMmIyMWM5NjItYWFhMS00NDAwLTg0MDktZGFjMjhmMjZlZWVmIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJhd3MuY29nbml0by5zaWduaW4udXNlci5hZG1pbiIsImF1dGhfdGltZSI6MTczMzQ3ODg4OCwiZXhwIjoxNzMzNTY1Mjg4LCJpYXQiOjE3MzM0Nzg4ODgsImp0aSI6ImY0NWJiODkxLWU2NWUtNDY5MC04NGUxLWE1ZDc4MmU0MWI0OCIsInVzZXJuYW1lIjoiYzE1M2FkOWEtYjBiMS03MGY1LTk2MDUtMTE2ZGJiYTYzMjIzIn0.YmbiXsEQo7rYmo_7fCOadjKOBq3vvMElXnNyfmidUoMwVWZ8db8egR4hms7BxyiX2ml3KJqiPDm2WBJ8YtMTe_qbei5FWe4x9AgsoyupSIL-053EYFD41ZqmZSxGoM9EhCllQ_wROQ0CD1iMbU5zJzXaH65XSdoIOy-5LAeTFEUFlDUKVNFGGEAfTzRgErEnzEmQQUL8oaSc3FyeuGdAtYfEDCClHd3B_rjZyBFAv6Se_OF2Sgy5pWxfaXEUqSf2_UkQqADF3oYjhAwhMM96szPF0t2hmNhJTZw0Axda73yvIAmAU1l8TQ_6-7QBKIYUyaJZjBRT_UvbLRSOUIeqiQ"
 
         if (token) {
           dispatch(authSignOut({ accessToken: token })) // Pass the token in the expected format
@@ -44,7 +45,7 @@ const Sidebar = () => {
               localStorage.removeItem("email");
               localStorage.removeItem("userEmail");
 
-              navigate("/auth/signin")
+              // navigate("/auth/signin")
             })
             .catch((error) => {
               console.error("Sign-out failed:", error);
@@ -60,25 +61,25 @@ const Sidebar = () => {
       console.warn("No user data found.");
     }
   };
-  //using this for protected routing
-  const [updatedEmail, setUpdatedEmail] = useState(null);
-  useEffect(() => {
-    try {
-      // Check if userEmail is null or empty, and handle redirect
-      if (!userEmail) {
-        throw new Error("userEmail is null or empty");
-      }
+  // //using this for protected routing
+  // const [updatedEmail, setUpdatedEmail] = useState(null);
+  // useEffect(() => {
+  //   try {
+  //     // Check if userEmail is null or empty, and handle redirect
+  //     if (!userEmail) {
+  //       throw new Error("userEmail is null or empty");
+  //     }
 
-      // Attempt to manipulate userEmail
-      const newEmail = userEmail.replace(/["\d+]|@gmail\.com/g, "");
-      setUpdatedEmail(newEmail);
+  //     // Attempt to manipulate userEmail
+  //     const newEmail = userEmail.replace(/["\d+]|@gmail\.com/g, "");
+  //     setUpdatedEmail(newEmail);
       
-    } catch (error) {
-      console.error(error.message);
-      // Redirect to auth/signin page if there is an error
-      navigate('/auth/signin');
-    }
-  }, [userEmail, navigate]);
+  //   } catch (error) {
+  //     console.error(error.message);
+  //     // Redirect to auth/signin page if there is an error
+  //     navigate('/auth/signin');
+  //   }
+  // }, [userEmail, navigate]);
 
 
 
@@ -114,7 +115,7 @@ const Sidebar = () => {
         }}
         >
     <Icon  variant='disabled' name="user-profile" size="medium" />
-    </div> <Box variant="h3">{updatedEmail ? updatedEmail : userEmail}</Box></div> }}
+    </div> <Box variant="h3">{userEmail}</Box></div> }}
       onFollow={handleFollow}
       items={pages}
     />

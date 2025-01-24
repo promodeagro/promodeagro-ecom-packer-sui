@@ -19,25 +19,6 @@ const OrderDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Fetch order details from API
-    const fetchOrderDetails = async () => {
-      try {
-        const response = await fetch(`https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/OrderDetails/${orderId}`); // Replace with your actual API URL
-        if (!response.ok) {
-          throw new Error("Failed to fetch order details");
-        }
-        const data = await response.json();
-        setOrderDetails(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrderDetails();
-  }, [orderId]);
 
   if (loading) {
     return <div>Loading...</div>;
