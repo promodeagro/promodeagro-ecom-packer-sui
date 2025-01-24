@@ -213,7 +213,7 @@ const submitPackedOrder = async () => {
             <div className="info-row">
               <span className="label">Delivery Slot:</span>
               <span className="value">
-                {deliverySlot?.startTime} - {deliverySlot?.endTime}
+                {deliverySlot?.startTime}{deliverySlot.startAmPm} - {deliverySlot?.endTime}{deliverySlot.endAmPm}
               </span>
             </div>
             <div className="items-list">
