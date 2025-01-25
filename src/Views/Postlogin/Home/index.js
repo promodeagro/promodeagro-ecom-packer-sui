@@ -123,8 +123,8 @@ const Home = () => {
                       <div className="info-row">
                         <span className="label">Delivery Slot :</span>
                         <span className="slot">
-                          {order?.deliverySlot?.startTime || "N/A"} -{" "}
-                          {order?.deliverySlot?.endTime || "N/A"}
+                          {order?.deliverySlot?.startTime || "N/A"}{order?.deliverySlot.startAmPm}-
+                          {order?.deliverySlot?.endTime || "N/A"}{order.deliverySlot.endAmPm}
                         </span>
                       </div>
                     </div>
