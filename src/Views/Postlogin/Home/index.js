@@ -12,6 +12,7 @@ import ContentLayout from "@cloudscape-design/components/content-layout";
 import { useNavigate } from "react-router-dom";
 // import HeaderCards from "../HeaderCards";
 import axios from "axios";
+import config from "Views/Config";
 
 const Home = () => {
   const [orders, setOrders] = useState([]);
@@ -23,23 +24,15 @@ const Home = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        // Retrieve the access token from local storage
-        const user = JSON.parse(localStorage.getItem("user"));
-        const token = user?.accessToken;
-
-        if (!token) {
-          throw new Error("Authorization token is missing.");
-        }
-
+        // IGNORE-AUTH-START
+        // const user = JSON.parse(localStorage.getItem("user"));
+        // const token = user?.accessToken || user?.token;
+        // if (!token) {
+        //   throw new Error("Authorization token is missing.");
+        // }
+        // IGNORE-AUTH-END
         // Make the API request
-        const response = await axios.get(
-          "https://bytud12spg.execute-api.ap-south-1.amazonaws.com/packer/order/6679942e-ab1e-4de1-8b1b-382a3ed9a044",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(config.ORDERS_UNPACKED);
         console.log(response,"ordersss");
 
         setOrders(response.data || []);
@@ -87,46 +80,33 @@ const Home = () => {
             <Container key={index}>
               <SpaceBetween direction="vertical" size="xs">
                 <Box>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <strong>Order ID: {order?.id}</strong>
-                    <Badge>
-                      Unpacked
-                    </Badge>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <strong>Order ID: {order?.order_id}</strong>
+                    <Badge>{order?.status || "Unpacked"}</Badge>
                   </div>
-
                   <SpaceBetween direction="vertical" size="s">
                     <div className="customer-info">
                       <div className="info-row">
                         <span className="label">Customer Name :</span>
-                        <span className="name">
-                          {order?.paymentDetails?.paymentLink?.customer_details
-                            ?.customer_name || "N/A"}
-                        </span>
+                        <span className="name">{order?.customer_name || "N/A"}</span>
                       </div>
                       <div className="info-row">
                         <span className="label">Total Items :</span>
-                        <span className="items">
-                          {order?.items?.length} Items
-                        </span>
+                        <span className="items">{order?.total_items || 0} Items</span>
                       </div>
                       <div className="info-row">
-                        <span className="label">Total Price :</span>
-                        <span className="price">
-                          ₹{order?.totalPrice || "0.00"}
-                        </span>
+                        <span className="label">Packed By :</span>
+                        <span className="name">{order?.packed_by || "N/A"}</span>
                       </div>
                       <div className="info-row">
-                        <span className="label">Delivery Slot :</span>
-                        <span className="slot">
-                          {order?.deliverySlot?.startTime || "N/A"}{order?.deliverySlot.startAmPm}-
-                          {order?.deliverySlot?.endTime || "N/A"}{order.deliverySlot.endAmPm}
-                        </span>
+                        <span className="label">Packed At :</span>
+                        <span className="name">{order?.packed_at || "N/A"}</span>
                       </div>
+                      <div className="info-row">
+                        <span className="label">Created At :</span>
+                        <span className="name">{order?.created_at || "N/A"}</span>
+                      </div>
+                      {/* Add more fields if your API provides them */}
                     </div>
                   </SpaceBetween>
                 </Box>

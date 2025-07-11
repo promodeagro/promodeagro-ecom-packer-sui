@@ -1,16 +1,27 @@
-const BASE_URL = "https://bytud12spg.execute-api.ap-south-1.amazonaws.com";
+const LOCAL_AUTH_BASE_URL = "http://localhost:3000/dev";
 
 const Config = {
-  BASE_URL,
-  FETCH_ORDERS: `${BASE_URL}/packer/order/6679942e-ab1e-4de1-8b1b-382a3ed9a044`,
-   FETCH_PACKEDORDERS:`${BASE_URL}/packer/order/6679942e-ab1e-4de1-8b1b-382a3ed9a044`,
-   FETCH_ORDERSDETAILs_BY_ID:`${BASE_URL}/packer/order/6679942e-ab1e-4de1-8b1b-382a3ed9a044`,
-  AUTH_USER:`${BASE_URL}/auth/signin`,
-  SIGNUP:`${BASE_URL}/auth/signup`,
-  SIGNOUT:`${BASE_URL}/auth/signout`,
-  FORGOT_PASSSWORD:`${BASE_URL}/auth/forgot-password`,
-  RESET_PASSWORD:`${BASE_URL}/auth/reset-password`,
+  // Auth
+  AUTH_USER: `${LOCAL_AUTH_BASE_URL}/login`,
+  SIGNUP: `${LOCAL_AUTH_BASE_URL}/signup`, // If you have a signup endpoint
+  SIGNOUT: `${LOCAL_AUTH_BASE_URL}/logout`,
+  FORGOT_PASSSWORD: `${LOCAL_AUTH_BASE_URL}/forgot-password`,
+  RESET_PASSWORD: `${LOCAL_AUTH_BASE_URL}/reset-password`,
+  VERIFY_OTP: `${LOCAL_AUTH_BASE_URL}/verify-otp`,
 
+  // Orders
+  ORDERS_UNPACKED: `${LOCAL_AUTH_BASE_URL}/orders/unpacked`,
+  ORDERS_PACKED: `${LOCAL_AUTH_BASE_URL}/orders/packed`,
+  ORDER_DETAILS: `${LOCAL_AUTH_BASE_URL}/orders/start`, // Usage: /orders/start/{order_id}
+  ORDER_COMPLETE: `${LOCAL_AUTH_BASE_URL}/orders/complete`,
+
+  // Notifications
+  NOTIFICATIONS: `${LOCAL_AUTH_BASE_URL}/notifications`, // Usage: ?user_id=USER_ID
+
+  // Profile
+  PROFILE: `${LOCAL_AUTH_BASE_URL}/profile`, // Usage: ?user_id=USER_ID
+  PROFILE_UPDATE: `${LOCAL_AUTH_BASE_URL}/profile/update`,
+  PROFILE_CHANGE_PASSWORD: `${LOCAL_AUTH_BASE_URL}/profile/change-password`,
 };
 
 export default Config;

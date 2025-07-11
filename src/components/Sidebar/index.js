@@ -44,8 +44,7 @@ const Sidebar = () => {
               localStorage.removeItem("user");
               localStorage.removeItem("email");
               localStorage.removeItem("userEmail");
-
-              // navigate("/auth/signin")
+              navigate("/auth/signin", { state: { logoutSuccess: true } });
             })
             .catch((error) => {
               console.error("Sign-out failed:", error);
@@ -77,7 +76,7 @@ const Sidebar = () => {
   //   } catch (error) {
   //     console.error(error.message);
   //     // Redirect to auth/signin page if there is an error
-  //     navigate('/auth/signin');
+  //     // navigate('/auth/signin');
   //   }
   // }, [userEmail, navigate]);
 

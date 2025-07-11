@@ -1,24 +1,98 @@
-import { Box, Button, Container, Form, FormField, Header, Icon, Input, SpaceBetween } from '@cloudscape-design/components'
-import React, { useState } from 'react'
+import { Box, Button, FormField, Header, Icon, Input, SpaceBetween, Spinner, Alert, Flashbar } from '@cloudscape-design/components'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { postLoginService } from "../../../Services";
+import config from "../../../Views/Config";
 
 const ProfileDetails = () => {
   const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [formEdit, setFormEdit] = useState(false);
+  const [flashItems, setFlashItems] = useState([]);
 
-  // have to change these value after getting api's 
-  const [username, setUsername] = useState("FatimaTabassum")
-  const [email, setEmail] = useState("FatimaTabassum@gmail.com")
-  const [password, setPassword] = useState("")
-  
-  // handle form state
-  const [formEdit, setFormEdit] = useState(false)
-  
+  useEffect(() => {
+    const fetchProfile = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const email = localStorage.getItem("userEmail")?.replace(/"/g, "");
+        const response = await postLoginService.get(`${config.PROFILE}?email=${email}`);
+        setUsername(response.data.username || "");
+        setEmail(response.data.email || "");
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+  }, []);
 
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const email = localStorage.getItem("userEmail")?.replace(/"/g, "");
+      await postLoginService.post(config.PROFILE_UPDATE, { user_id: user?.userId || user?.id || user?.user_id, username, email });
+      setSuccess("Profile updated successfully!");
+      setFlashItems([{ type: "success", content: "Profile updated successfully!", id: "profile_success" }]);
+      setFormEdit(false);
+    } catch (err) {
+      setError(err.response?.data?.message || err.message);
+      setFlashItems([{ type: "error", content: err.response?.data?.message || err.message, id: "profile_error" }]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const handleForm = (e) =>{
-    e.preventDefault()
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+    if (!email || !password || !confirmPassword) {
+      setError("Email, new password, and confirm password are required.");
+      setFlashItems([{ type: "error", content: "Email, new password, and confirm password are required.", id: "password_error" }]);
+      setLoading(false);
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      setFlashItems([{ type: "error", content: "Passwords do not match.", id: "password_error" }]);
+      setLoading(false);
+      return;
+    }
+    try {
+      await postLoginService.post(config.PROFILE_CHANGE_PASSWORD, {
+        email,
+        new_password: password,
+        confirm_password: confirmPassword,
+      });
+      setSuccess("Password changed successfully!");
+      setFlashItems([{ type: "success", content: "Password changed successfully!", id: "password_success" }]);
+      setPassword("");
+      setConfirmPassword("");
+    } catch (err) {
+      setError(err.response?.data?.message || err.message);
+      setFlashItems([{ type: "error", content: err.response?.data?.message || err.message, id: "password_error" }]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  }
+  if (loading) return <Spinner />;
+  if (error) return <Alert type="error" header="Error">{error}</Alert>;
+
   return (
    <>
    <Header variant='h3'>
@@ -27,13 +101,10 @@ const ProfileDetails = () => {
       <span className="header_underline">Profile Details</span>
       </SpaceBetween>
    </Header>
-
-
-   <form  onSubmit={handleForm}>
-   
+   <Flashbar items={flashItems} />
+   <form onSubmit={formEdit ? handleUpdate : handleChangePassword}>
           <SpaceBetween  direction="vertical" size="l">
-          <Box
-          >
+          <Box>
             <div 
             style={{
               width:"100px" ,
@@ -59,23 +130,21 @@ const ProfileDetails = () => {
             <FormField  label="Password">
               <Input onChange={(e)=> setPassword(e.detail.value)} value={password} type='password' placeholder='**********' />
             </FormField>
+            <FormField  label="Confirm Password">
+              <Input onChange={(e)=> setConfirmPassword(e.detail.value)} value={confirmPassword} type='password' placeholder='**********' />
+            </FormField>
             </div>
             {formEdit ? (
               <>
-          {/* // If formEdit is true, render the "Update" button */}
-          <Button fullWidth variant='primary'>Update</Button>
-          <Button onClick={()=> setFormEdit(true)} fullWidth variant='inline-link'>Cancel</Button>
+          <Button fullWidth variant='primary' type="submit">Update</Button>
+          <Button onClick={()=> setFormEdit(false)} fullWidth variant='inline-link'>Cancel</Button>
           </>
         ) : (
-          // If formEdit is false, render the "Edit" button
           <>
-          <Button fullWidth variant='primary'>Continue</Button>
+          <Button fullWidth variant='primary' type="submit">Change Password</Button>
           <Button onClick={()=> setFormEdit(true)} fullWidth variant='inline-link' iconName='edit'> Edit</Button>
           </>
         )}
-            
-
-          
           </SpaceBetween>
           </form>
    </>

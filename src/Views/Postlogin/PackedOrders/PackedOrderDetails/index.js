@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Button,
@@ -8,17 +8,33 @@ import {
   Box
 } from "@cloudscape-design/components";
 import { useParams, useNavigate } from "react-router-dom";
-
+import { postLoginService } from "../../../../Services";
+import config from "../../../../Views/Config";
 
 const OrderDetails = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
- 
+
   // State to store order details
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await postLoginService.get(`${config.ORDER_DETAILS}/${orderId}`);
+        setOrderDetails(response.data || response);
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOrderDetails();
+  }, [orderId]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -32,8 +48,21 @@ const OrderDetails = () => {
     return <div>No order details found</div>;
   }
 
-  const { CustomerName, Payment, Price, ItemsList, CostDetails,items } = orderDetails;
-  console.log(orderDetails,"specific");
+  // Use the actual API field names
+  const {
+    order_id,
+    customer_name,
+    total_items,
+    status,
+    packed_by,
+    packed_at,
+    created_at,
+    items = [],
+    price,
+    payment_method,
+    // Add more fields as needed
+  } = orderDetails;
+
   return (
     <div>
       <BreadcrumbGroup
@@ -59,25 +88,39 @@ const OrderDetails = () => {
       <div className="details">
         <div className="info-row">
           <span className="label">Order ID :</span>
-          <span className="value">{orderId?.slice(-7)}</span>
+          <span className="value">{order_id}</span>
         </div>
         <div className="info-row">
           <span className="label">Customer Name :</span>
-          <span className="value">{CustomerName}</span>
+          <span className="value">{customer_name}</span>
         </div>
         <div className="info-row">
-          <span className="label">Payment :</span>
-          <span className="value">{Payment.method}</span>
+          <span className="label">Packed By :</span>
+          <span className="value">{packed_by || "N/A"}</span>
+        </div>
+        <div className="info-row">
+          <span className="label">Packed At :</span>
+          <span className="value">{packed_at || "N/A"}</span>
+        </div>
+        <div className="info-row">
+          <span className="label">Created At :</span>
+          <span className="value">{created_at || "N/A"}</span>
+        </div>
+        <div className="info-row">
+          <span className="label">Status :</span>
+          <span className="value">{status || "Packed"}</span>
+        </div>
+        <div className="info-row">
+          <span className="label">Total Items :</span>
+          <span className="value">{total_items}</span>
         </div>
         <div className="info-row">
           <span className="label">Price :</span>
-          <span className="value">₹{Price}</span>
+          <span className="value">₹{price || "N/A"}</span>
         </div>
-        <div className="items-list">
-          <span className="items-label">
-            Items list <span className="items-count">({items} Items)</span>
-          </span>
-          <Badge color="blue">Packed Order</Badge>
+        <div className="info-row">
+          <span className="label">Payment Method :</span>
+          <span className="value">{payment_method || "N/A"}</span>
         </div>
       </div>
 
@@ -85,69 +128,40 @@ const OrderDetails = () => {
 
       {/* Items Display */}
       <div className="items-container">
-        {ItemsList.map((item, index) => (
-          <div key={index} style={{ marginBottom: "10px" }}>
-            <Container>
-              <div className="product-card">
-                <div className="image-container">
-                  <img
-                    src={item.Images}
-                    alt={item.Name}
-                    className="product-image"
-                  />
+        {items.length === 0 ? (
+          <div>No items found for this order.</div>
+        ) : (
+          items.map((item, index) => (
+            <div key={index} style={{ marginBottom: "10px" }}>
+              <Container>
+                <div className="product-card">
+                  <div className="image-container">
+                    <img
+                      src={item.productImage || item.image || ""}
+                      alt={item.productName || item.name || ""}
+                      className="product-image"
+                    />
+                  </div>
+                  <div className="details">
+                    <div className="info-row">
+                      <span className="label">Name :</span>
+                      <span className="value">{item.productName || item.name || "N/A"}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="label">Quantity :</span>
+                      <span className="value">{item.quantity || "N/A"}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="label">Price :</span>
+                      <span className="value">₹{item.price || "N/A"}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="details">
-                  <div className="info-row">
-                    <span className="label">Name :</span>
-                    <span className="value">{item.Name}</span>
-                  </div>
-                  <div className="info-row">
-                    <span className="label">Quantity :</span>
-                    <span className="value">{item.Quantity}</span>
-                  </div>
-                  <div className="info-row">
-                    <span className="label">Price :</span>
-                    <span className="value">₹{item.Price}</span>
-                  </div>
-                </div>
-              </div>
-            </Container>
-          </div>
-        ))}
+              </Container>
+            </div>
+          ))
+        )}
       </div>
-
-      {/* Cost Details */}
-      <h3>Cost Details</h3>
-      <SpaceBetween direction="vertical" size="l">
-        <Container>
-          <SpaceBetween direction="vertical" size="xxs">
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Sub Total :</span>
-              <strong>₹{CostDetails.SubTotal}</strong>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Shipping Charges :</span>
-              <strong>₹{CostDetails.ShippingCharges}</strong>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Gross Amount :</span>
-              <strong>₹{CostDetails.GrossDetails}</strong>
-            </div>
-          </SpaceBetween>
-          <hr />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              fontWeight: "bold",
-              alignItems: "center",
-            }}
-          >
-            <span>Total Amount :</span>
-            <span>₹{CostDetails.TotalAmount}</span>
-          </div>
-        </Container>
-      </SpaceBetween>
     </div>
   );
 };

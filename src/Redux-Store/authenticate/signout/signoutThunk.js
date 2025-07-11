@@ -4,10 +4,10 @@ import { postLoginService } from "Services";
 
 export const authSignOut = createAsyncThunk(
   "auth/signOut",
-  async ({ accessToken }, { rejectWithValue }) => { // Expect an object with accessToken
+  async (_, { rejectWithValue }) => { // No payload needed
     try {
       const url = config.SIGNOUT;
-      const response = await postLoginService.post(url, { accessToken }); // Use the expected payload
+      const response = await postLoginService.post(url, {}); // Send empty object
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : { message: 'Unknown error' });

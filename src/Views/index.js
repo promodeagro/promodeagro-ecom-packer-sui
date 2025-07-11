@@ -8,11 +8,11 @@ import CreateNewPassword from "./PreLogin/CreateNewPassword";
 import  Notifications  from "./Postlogin/Notifications/index";
 import ProfileDetails from "./Postlogin/ProfileDetails";
 import OtpVerification from "./PreLogin/OtpVerification";
+import CompleteOrder from "./Postlogin/Home/CompleteOrder";
 const Home = lazy(() => import("./Postlogin/Home"));
 const StartOrders = lazy(() => import("./Postlogin/Home/StartOrder"));
 
-const Orders = lazy(() => import("./Postlogin/PackedOrders"));
-
+const PackedOrders = lazy(() => import("./Postlogin/PackedOrders"));
 
 
 const PathNotFOund = lazy(() => import("./PathNotFound"));
@@ -56,11 +56,16 @@ const Views = () => {
             path={`${PREFIX_APP_PATH}/Home/StartOrder`}
             element={<StartOrders/>}
           />
+          <Route
+            exact
+            path={`${PREFIX_APP_PATH}/Home/CompleteOrder`}
+            element={<CompleteOrder />}
+          />
        
           <Route
             exact
             path={`${PREFIX_APP_PATH}/PackedOrders`}
-            element={<Orders />}
+            element={<PackedOrders />}
           />
         
 

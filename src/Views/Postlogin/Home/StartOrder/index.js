@@ -27,6 +27,7 @@ const StartOrder = () => {
   const [submittedImage, setSubmittedImage] = useState(null);
   const [hideUI, setHideUI] = useState(false); // State to hide UI
   const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
+  const [showPhotoOptions, setShowPhotoOptions] = useState(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -64,8 +65,21 @@ const StartOrder = () => {
   setPhoto(imageData);
 
   // Stop camera
-  videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
+  if (videoRef.current.srcObject && typeof videoRef.current.srcObject.getTracks === 'function') {
+    videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
+  }
   setIsCameraOpen(false);
+  setShowPhotoOptions(true);
+};
+
+const handleRetakePhoto = () => {
+  setPhoto(null);
+  setShowPhotoOptions(false);
+  openCamera();
+};
+
+const handleCompleteOrder = () => {
+  navigate("/app/Home/CompleteOrder", { state: { orderDetails, photo } });
 };
 
 // Upload photo to S3 and pack order
@@ -119,10 +133,6 @@ const submitPackedOrder = async () => {
       `https://bytud12spg.execute-api.ap-south-1.amazonaws.com/packer/order/${orderDetails.id}`,
       {
         method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`, // Replace with actual token if required
-        },
-     
         body: JSON.stringify({ action: "pack", image: "https://example.com/image.jpg" }),
       }
     );
@@ -198,69 +208,82 @@ const submitPackedOrder = async () => {
           <div className="details">
             <div className="info-row">
               <span className="label">Order ID:</span>
-              {/* <span className="value">{orderId?.slice(-7)}</span> */}
-              <span className="value">{orderId}</span>
-
+              <span className="value">{orderDetails?.order_id || "N/A"}</span>
             </div>
             <div className="info-row">
-              <span className="label">Payment:</span>
-              <span className="value">{paymentDetails?.method}</span>
+              <span className="label">Customer Name:</span>
+              <span className="value">{orderDetails?.customer_name || "N/A"}</span>
             </div>
             <div className="info-row">
-              <span className="label">Price:</span>
-              <span className="value">₹{totalPrice}</span>
+              <span className="label">Total Items:</span>
+              <span className="value">{orderDetails?.total_items || 0}</span>
             </div>
             <div className="info-row">
-              <span className="label">Delivery Slot:</span>
-              <span className="value">
-                {deliverySlot?.startTime}{deliverySlot.startAmPm} - {deliverySlot?.endTime}{deliverySlot.endAmPm}
-              </span>
+              <span className="label">Status:</span>
+              <span className="value">{orderDetails?.status || "N/A"}</span>
             </div>
-            <div className="items-list">
-              <span className="items-label">
-                Items List{" "}
-                <span className="items-count">({items.length} Items)</span>
-              </span>
-              <Badge>Unpacked Order</Badge>
+            <div className="info-row">
+              <span className="label">Packed By:</span>
+              <span className="value">{orderDetails?.packed_by || "N/A"}</span>
+            </div>
+            <div className="info-row">
+              <span className="label">Packed At:</span>
+              <span className="value">{orderDetails?.packed_at || "N/A"}</span>
+            </div>
+            <div className="info-row">
+              <span className="label">Created At:</span>
+              <span className="value">{orderDetails?.created_at || "N/A"}</span>
+            </div>
+            <div className="info-row">
+              <span className="label">Photo:</span>
+              {orderDetails?.photo ? (
+                <img src={orderDetails.photo} alt="Order Photo" style={{ maxWidth: 100, maxHeight: 100 }} />
+              ) : (
+                <span className="value">N/A</span>
+              )}
             </div>
           </div>
           <hr />
 
           {/* Items Display */}
           <div className="items-container">
-            {items.map((item, index) => (
+            {Array.isArray(items) && items.length > 0 ? (
+              items.map((item, index) => (
               
-              // <Container style={{marginBottom:'10px'}} key={index}>
-                <div  key={index} className="product-card">
-                  <img src={item.productImage}  alt="product" height={60} width={55}></img>
-                  <div
-  style={{
-    width: "1px", // Width of the line
-    height: "110px", // Height of the line
-    backgroundColor: "gray", // Line color
-    margin: "0 auto", // Optional: Center the line horizontally
-  }}
-></div>
+                // <Container style={{marginBottom:'10px'}} key={index}>
+                  <div  key={index} className="product-card">
+                    <img src={item.productImage}  alt="product" height={60} width={55}></img>
+                    <div
+      style={{
+        width: "1px", // Width of the line
+        height: "110px", // Height of the line
+        backgroundColor: "gray", // Line color
+        margin: "0 auto", // Optional: Center the line horizontally
+      }}
+    ></div>
 
-                  <div className="details">
-                    <div className="info-row">
-                      <span className="label">Name:</span>
-                      <span className="value">{item.productName}</span>
-                    </div>
-                    <div className="info-row">
-                      <span className="label">Quantity:</span>
-                      <span className="value">
-                        {item.quantity} {item.unit}
-                      </span>
-                    </div>
-                    <div className="info-row">
-                      <span className="label">Price:</span>
-                      <span className="value">₹{item.price}</span>
+                    <div className="details">
+                      <div className="info-row">
+                        <span className="label">Name:</span>
+                        <span className="value">{item.productName}</span>
+                      </div>
+                      <div className="info-row">
+                        <span className="label">Quantity:</span>
+                        <span className="value">
+                          {item.quantity} {item.unit}
+                        </span>
+                      </div>
+                      <div className="info-row">
+                        <span className="label">Price:</span>
+                        <span className="value">₹{item.price}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              // </Container>
-            ))}
+                // </Container>
+              ))
+            ) : (
+              <div>No items found for this order.</div>
+            )}
           </div>
 
           {/* Cost Details Section */}
@@ -358,6 +381,24 @@ const submitPackedOrder = async () => {
               Complete Pack Order
             </Button>
           </Box>
+        </div>
+      )}
+
+      {photo && showPhotoOptions && (
+        <div style={{ textAlign: "center", marginTop: 20 }}>
+          <img
+            src={photo}
+            alt="Preview"
+            style={{ width: "100%", maxWidth: 400, height: "auto", objectFit: "cover", marginBottom: 20 }}
+          />
+          <div>
+            <Button variant="primary" onClick={handleCompleteOrder} style={{ marginRight: 10 }}>
+              Complete Order
+            </Button>
+            <Button variant="normal" onClick={handleRetakePhoto}>
+              Retake Photo
+            </Button>
+          </div>
         </div>
       )}
 

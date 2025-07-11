@@ -21,14 +21,17 @@ const packedOrdersSlice = createSlice({
     builder
       .addCase(fetchpackedOrders.pending, (state) => {
         state.ordersData.status = 'loading';
+        state.ordersData.error = null;
       })
       .addCase(fetchpackedOrders.fulfilled, (state, action) => {
         state.ordersData.data = action.payload;
         state.ordersData.status = 'succeeded';
+        state.ordersData.error = null;
       })
       .addCase(fetchpackedOrders.rejected, (state, action) => {
         state.ordersData.status = 'failed';
-        state.ordersData.error = action.error.message;
+        state.ordersData.error = action.payload || action.error.message;
+        state.ordersData.data = null;
       });
 
     // Handling fetching order details by ID

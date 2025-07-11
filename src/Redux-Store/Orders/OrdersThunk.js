@@ -1,92 +1,52 @@
-// import { createAsyncThunk } from "@reduxjs/toolkit";
-// import config from "Views/Config";
-// import { postLoginService } from "Services";
-// // Helper function to get the token from localStorage
-// const getToken = () => {
-//   const token = localStorage.getItem("user");
-//   return token ? JSON.parse(token).accessToken : null;
-// };
-// export const fetchOrders = createAsyncThunk(
-//   "orders",
-//   async (params, { rejectWithValue }) => {
-//     try {
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import config from "Views/Config";
+import { postLoginService } from "Services";
 
+export const fetchUnpackedOrders = createAsyncThunk(
+  "orders/unpacked",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await postLoginService.get(config.ORDERS_UNPACKED);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
 
-//       const token = getToken();
+export const fetchPackedOrders = createAsyncThunk(
+  "orders/packed",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await postLoginService.get(config.ORDERS_PACKED);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
 
-//       if (!token) {
-//         return rejectWithValue("Authorization token is missing.");
-//       }
+export const fetchOrderDetails = createAsyncThunk(
+  "orders/details",
+  async (orderId, { rejectWithValue }) => {
+    try {
+      const response = await postLoginService.get(`${config.ORDER_DETAILS}/${orderId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
 
-
-//       const url = config.FETCH_ORDERS;
-
-//       const response = await postLoginService.get(url, {
-//         headers: {
-//           Authorization: `Bearer${token}`, // Add token here
-//         },
-
-       
-//       });
-
-//       console.log(response.data, "order from thunk");
-//       return response.data;
-//     } catch (error) {
-//       console.error("Error fetching orders:", error);
-//     }
-//   }
-// );
-// // Thunk to upload photo (POST request)
-// export const uploadPhotoThunk = createAsyncThunk(
-//   'packedOrders/uploadPhoto',
-//   async ({ orderId, photo }, { rejectWithValue }) => {
-//     try {
-//       const response = await fetch(
-//         `https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/orders/${orderId}/upload-photo`,
-//         {
-//           method: 'POST',
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//           body: JSON.stringify({ data: photo }),
-//         }
-//       );
-
-//       if (!response.ok) {
-//         throw new Error('Failed to upload photo');
-//       }
-
-//       return await response.json(); // Return the response data
-//     } catch (error) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
-
-// // Thunk to complete packed order (PUT request)
-// export const completePackedOrderThunk = createAsyncThunk(
-//   'packedOrders/completePackedOrder',
-//   async ({ orderId }, { rejectWithValue }) => {
-//     try {
-//       const response = await fetch(
-//         `https://3ncf9yui1h.execute-api.us-east-1.amazonaws.com/dev/orders/${orderId}/CompletePacked`,
-//         {
-//           method: 'PUT',
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//           body: JSON.stringify({ Status: 'Packed' }),
-//         }
-//       );
-
-//       if (!response.ok) {
-//         throw new Error('Failed to complete packing the order');
-//       }
-
-//       return await response.json(); // Return the response data
-//     } catch (error) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
+export const completeOrder = createAsyncThunk(
+  "orders/complete",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await postLoginService.post(config.ORDER_COMPLETE, payload);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
 

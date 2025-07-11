@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import vector from "../../Assets/Images/Vector.png";
 import PTRLogo from "../../Assets/Images/PTRLogo.png";
 import {
@@ -13,17 +13,36 @@ import {
 import { authSignIn } from "Redux-Store/authenticate/signin/signinThunk";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { LuEyeOff } from "react-icons/lu";
 import { FiEye } from "react-icons/fi";
 const Signin = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
   const [items, setItems] = React.useState([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+
+  // Show logout success message if redirected from logout
+  useEffect(() => {
+    if (location.state && location.state.logoutSuccess) {
+      setItems([
+        {
+          type: "success",
+          content: "Logout successful!",
+          dismissible: true,
+          dismissLabel: "Dismiss message",
+          onDismiss: () => setItems([]),
+          id: "logout_success",
+        },
+      ]);
+      // Clear the state so it doesn't show again on refresh
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   const handleLogin = () => {
     dispatch(authSignIn({ email, password }))

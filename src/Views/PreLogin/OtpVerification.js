@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import vector from "../../Assets/Images/Vector.png"
 import PTRLogo from "../../Assets/Images/PTRLogo.png"
-import { Box,Button, Container, FormField, Input, SpaceBetween,Link,Header } from '@cloudscape-design/components'
+import { Box,Button, Container, FormField, Input, SpaceBetween,Link,Header, Flashbar } from '@cloudscape-design/components'
 import { useNavigate } from 'react-router-dom'
+import { preLoginService } from "../../Services";
+import config from "../Config";
 const OtpVerification = () => {
     const navigate = useNavigate()
     const [otp, setOtp] = useState(new Array(6).fill(""));
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (element, index) => {
       if (isNaN(element.value)) return;
@@ -18,12 +22,43 @@ const OtpVerification = () => {
       }
     };
   
-    const handleVerify = () => {
+    const handleVerify = async () => {
+      setLoading(true);
       const OTP = otp.join("");
-      console.log("OTP entered:", OTP);
-      
-      // Pass OTP to the next route as state
-      navigate("/auth/CreateNewPassword", { state: { OTP } });
+      const emailVal = localStorage.getItem("email");
+      const parsedEmail = JSON.parse(emailVal);
+      try {
+        const response = await preLoginService.post(config.VERIFY_OTP, {
+          email: parsedEmail,
+          otp: OTP,
+        });
+        setItems([
+          {
+            type: "success",
+            content: "OTP verified successfully!",
+            dismissible: true,
+            dismissLabel: "Dismiss message",
+            onDismiss: () => setItems([]),
+            id: "message_1",
+          },
+        ]);
+        setTimeout(() => {
+          navigate("/auth/CreateNewPassword", { state: { OTP } });
+        }, 1000);
+      } catch (error) {
+        setItems([
+          {
+            type: "error",
+            content: `OTP verification failed: ${error?.response?.data?.message || error.message}`,
+            dismissible: true,
+            dismissLabel: "Dismiss message",
+            onDismiss: () => setItems([]),
+            id: "message_2",
+          },
+        ]);
+      } finally {
+        setLoading(false);
+      }
     };
     
   
@@ -56,9 +91,12 @@ const OtpVerification = () => {
 
         
                   
-          <Button  variant='primary' onClick={handleVerify} fullWidth>Verify</Button>
+          <Button  variant='primary' onClick={handleVerify} fullWidth disabled={loading}>
+            {loading ? "Verifying..." : "Verify"}
+          </Button>
             <Button variant='link' fullWidth onClick={() => navigate("/auth/signin")}>Cancel</Button>
         </SpaceBetween>
+        <Flashbar items={items} />
       </Container>
           </div>
   )

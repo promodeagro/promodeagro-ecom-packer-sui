@@ -5,14 +5,13 @@ import { postLoginService } from "Services";
 // Fetch packed orders (already defined)
 export const fetchpackedOrders = createAsyncThunk(
   'packedOrders/fetchpackedOrders',
-  async (params) => {
+  async (params, { rejectWithValue }) => {
     try {
-      let url = config.FETCH_PACKEDORDERS;
+      let url = config.ORDERS_PACKED; // Use the correct local endpoint
       const response = await postLoginService.get(url);
-      console.log(response, "packed order");
       return response.data;
     } catch (error) {
-      return error;
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
@@ -20,14 +19,14 @@ export const fetchpackedOrders = createAsyncThunk(
 // Fetch order details by orderId
 export const fetchOrderDetailsById = createAsyncThunk(
   'packedOrders/fetchOrderDetailsById',
-  async (orderId) => {
+  async (orderId, { rejectWithValue }) => {
     try {
       let url = `${config.FETCH_ORDERSDETAILs_BY_ID}/${orderId}`; // Assuming config.ORDER_DETAILS is the base URL
       const response = await postLoginService.get(url);
       console.log(response, "order details");
       return response.data;
     } catch (error) {
-      return error;
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );

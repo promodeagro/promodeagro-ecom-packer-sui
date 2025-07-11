@@ -18,7 +18,7 @@ import HeaderCards from "../HeaderCards";
 const PackedOrders = () => {
   const dispatch = useDispatch();
   const packedData = useSelector((state) => state.Packedorders?.ordersData);
-  const Packedorders = packedData?.data?.PackedOrders || [];
+  const Packedorders = packedData?.data || [];
   console.log(Packedorders,"packed order");
 
   useEffect(() => {
@@ -81,26 +81,27 @@ const PackedOrders = () => {
               <SpaceBetween direction="vertical" size="xs">
                 <Box>
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <strong>Order ID: {order.OrderId?.slice(-7)}</strong>
-                    <Badge color="blue">{order.OrderStatus} Order</Badge>
+                    <strong>Order ID: {order?.order_id}</strong>
+                    <Badge color="blue">{order?.status || "Packed"}</Badge>
                   </div>
                   <SpaceBetween direction="vertical" size="s">
                     <div className="customer-info">
                       <div className="info-row">
                         <span className="label">Customer Name:</span>
-                        <span className="name">{order.CustomerName}</span>
+                        <span className="name">{order?.customer_name}</span>
                       </div>
                       <div className="info-row">
                         <span className="label">Total Items:</span>
-                        <span className="items">{order.TotalItems} Items</span>
+                        <span className="items">{order?.total_items} Items</span>
                       </div>
+                      {/* Add more fields if your API provides them */}
                     </div>
                   </SpaceBetween>
                 </Box>
                 <Button
                   variant="primary"
                   fullWidth
-                  onClick={() => navigate(`/app/PackedOrders/PackedOrderDetails/${order.OrderId}`)}
+                  onClick={() => navigate(`/app/PackedOrders/PackedOrderDetails/${order.order_id}`)}
                 >
                   View Details
                 </Button>

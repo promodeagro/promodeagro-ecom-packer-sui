@@ -15,10 +15,10 @@ import signoutReducer from "Redux-Store/authenticate/signout/signoutSlice"
 const store = configureStore({
   reducer: {
 
-    // orders: OrdersSlice,
-    // Packedorders: packedOrderReducer, 
+    orders: OrdersSlice,
+    Packedorders: packedOrderReducer, 
     auth:authReducer,
-    // forgotPwd : forgotPwdReducer,
+    forgotPwd : forgotPwdReducer,
     resetPwd:resetPwdSlice,
     otp:otpSlice,
     // signup:signupReducer,
