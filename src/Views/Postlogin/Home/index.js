@@ -10,51 +10,29 @@ import {
 } from "@cloudscape-design/components";
 import ContentLayout from "@cloudscape-design/components/content-layout";
 import { useNavigate } from "react-router-dom";
-// import HeaderCards from "../HeaderCards";
-import axios from "axios";
-import config from "Views/Config";
+import HeaderCards from "../HeaderCards";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUnpackedOrders } from "../../../Redux-Store/Orders/OrdersThunk";
+import { fetchpackedOrders } from "../../../Redux-Store/PackedOrders/PackedOrderThunk";
 
 const Home = () => {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
+  const dispatch = useDispatch();
+  const unpackedData = useSelector((state) => state.orders?.ordersData);
+  const packedData = useSelector((state) => state.Packedorders?.ordersData);
+  const Unpackedorders = unpackedData?.data || [];
+  const Packedorders = packedData?.data || [];
+  const [selectedTab, setSelectedTab] = useState("unpacked");
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        // IGNORE-AUTH-START
-        // const user = JSON.parse(localStorage.getItem("user"));
-        // const token = user?.accessToken || user?.token;
-        // if (!token) {
-        //   throw new Error("Authorization token is missing.");
-        // }
-        // IGNORE-AUTH-END
-        // Make the API request
-        const response = await axios.get(config.ORDERS_UNPACKED);
-        console.log(response,"ordersss");
+    if (selectedTab === "unpacked") {
+      dispatch(fetchUnpackedOrders());
+    } else {
+      dispatch(fetchpackedOrders());
+    }
+  }, [dispatch, selectedTab]);
 
-        setOrders(response.data || []);
-      } catch (err) {
-        console.error("Error fetching orders:", err);
-        setError(err.message || "Failed to fetch orders.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrders();
-  }, []);
-  console.log(orders,"orderss");
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
+  const orders = selectedTab === "unpacked" ? Unpackedorders : Packedorders;
 
   return (
     <ContentLayout
@@ -72,57 +50,48 @@ const Home = () => {
           <span className="header_underline">Today's Orders</span>
         </Header>
 
-     
+        {/* Header Cards for Unpacked/Packed Orders */}
+        <HeaderCards onSelect={setSelectedTab} selectedTab={selectedTab} />
 
         {/* Orders List */}
         {orders && orders.length > 0 ? (
           orders.map((order, index) => (
-            <Container key={index}>
+            <Container key={index} style={{ borderRadius: 16, marginBottom: 16, boxShadow: "0 2px 8px rgba(0,0,0,0.08)", border: "1px solid #eee" }}>
               <SpaceBetween direction="vertical" size="xs">
                 <Box>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <strong>Order ID: {order?.order_id}</strong>
-                    <Badge>{order?.status || "Unpacked"}</Badge>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <strong style={{ fontSize: 18 }}>Order ID : {order?.order_id}</strong>
+                    <span style={{ background: selectedTab === "unpacked" ? "#6c757d" : "#0972D3", color: "#fff", borderRadius: 6, padding: "2px 10px", fontWeight: 600, fontSize: 14 }}>
+                      {selectedTab === "unpacked" ? "Unpacked Order" : "Packed Order"}
+                    </span>
                   </div>
                   <SpaceBetween direction="vertical" size="s">
                     <div className="customer-info">
                       <div className="info-row">
                         <span className="label">Customer Name :</span>
-                        <span className="name">{order?.customer_name || "N/A"}</span>
+                        <span className="name" style={{ fontWeight: 600 }}>{order?.customer_name || order?.customerName || "N/A"}</span>
                       </div>
                       <div className="info-row">
                         <span className="label">Total Items :</span>
-                        <span className="items">{order?.total_items || 0} Items</span>
+                        <span className="items" style={{ fontStyle: "italic", fontWeight: 600 }}>{order?.total_items || (order?.items ? order.items.length : 0)} Items</span>
                       </div>
-                      <div className="info-row">
-                        <span className="label">Packed By :</span>
-                        <span className="name">{order?.packed_by || "N/A"}</span>
-                      </div>
-                      <div className="info-row">
-                        <span className="label">Packed At :</span>
-                        <span className="name">{order?.packed_at || "N/A"}</span>
-                      </div>
-                      <div className="info-row">
-                        <span className="label">Created At :</span>
-                        <span className="name">{order?.created_at || "N/A"}</span>
-                      </div>
-                      {/* Add more fields if your API provides them */}
                     </div>
                   </SpaceBetween>
                 </Box>
-
                 <hr />
-
                 <Button
                   variant="primary"
                   fullWidth
-                  onClick={() =>
-                    navigate(`/app/Home/StartOrder`, {
-                      state: { orderDetails: order },
-                    })
-                  }
+                  style={{ borderRadius: 8, background: "#0972D3", fontWeight: 700, fontSize: 16 }}
+                  onClick={() => {
+                    if (selectedTab === "unpacked") {
+                      navigate(`/app/Home/StartOrder`, { state: { orderDetails: order } });
+                    } else {
+                      navigate(`/app/PackedOrders/PackedOrderDetails/${order.order_id}`);
+                    }
+                  }}
                 >
-                  Start Order
+                  {selectedTab === "unpacked" ? "Start Order" : "View Details"}
                 </Button>
               </SpaceBetween>
             </Container>

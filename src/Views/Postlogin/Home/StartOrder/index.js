@@ -17,9 +17,10 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 const StartOrder = () => {
   const location = useLocation();
-  const { orderDetails } = location.state || {};
-  console.log(orderDetails, "order details");
-
+  const { orderDetails: navOrderDetails } = location.state || {};
+  // State for order details
+  const [orderDetails, setOrderDetails] = useState(navOrderDetails || null);
+  const [loading, setLoading] = useState(!navOrderDetails);
   // State management for camera and modal
   const [isUploading, setIsUploading] = useState(false); // State to show the spinner during upload
   const [isCameraOpen, setIsCameraOpen] = useState(false);
@@ -30,8 +31,43 @@ const StartOrder = () => {
   const [showPhotoOptions, setShowPhotoOptions] = useState(false);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-
   const navigate = useNavigate();
+
+  // Get order_id from navOrderDetails if present
+  const navOrderId = navOrderDetails?.order_id;
+
+  useEffect(() => {
+    // Only fetch if we don't already have items and cost_details
+    if (navOrderId && (!navOrderDetails?.items || !navOrderDetails?.cost_details)) {
+      setLoading(true);
+      fetch(`http://localhost:3000/dev/orders/start/${navOrderId}`)
+        .then(res => res.json())
+        .then(data => {
+          setOrderDetails(data);
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
+    }
+  }, [navOrderId, navOrderDetails]);
+
+  if (loading) return <div>Loading...</div>;
+  if (!orderDetails) return <div>No order details found</div>;
+
+  // Parse DynamoDB format if needed
+  let parsedOrderDetails = orderDetails;
+  if (orderDetails && (orderDetails.S || orderDetails.N || orderDetails.M || orderDetails.L)) {
+    parsedOrderDetails = parseDynamoDB(orderDetails);
+  }
+  console.log("Original orderDetails:", orderDetails);
+  console.log("Parsed orderDetails:", parsedOrderDetails);
+  console.log("Items array:", parsedOrderDetails?.items);
+  console.log("Cost fields:", {
+    subTotal: parsedOrderDetails?.subTotal,
+    deliveryCharges: parsedOrderDetails?.deliveryCharges,
+    tax: parsedOrderDetails?.tax,
+    totalSavings: parsedOrderDetails?.totalSavings,
+    totalPrice: parsedOrderDetails?.totalPrice
+  });
 
   // Open camera
   const openCamera = async () => {
@@ -158,12 +194,12 @@ const submitPackedOrder = async () => {
   //   setIsUploading(false);
   // }
 // };
-  if (!orderDetails) {
+  if (!parsedOrderDetails) {
     return <div>No order details found</div>;
   }
 
   const {
-    id: orderId,
+    id,
     totalPrice,
     paymentDetails,
     items,
@@ -172,7 +208,34 @@ const submitPackedOrder = async () => {
     tax,
     totalSavings,
     deliverySlot,
-  } = orderDetails;
+    order_id,
+    customer_name,
+    total_items,
+    status,
+    packed_by,
+    packed_at,
+    created_at,
+    photo: orderPhoto,
+    cost_details
+  } = parsedOrderDetails;
+
+  // Fallback calculation for cost details if not provided
+  const calcSubTotal = Array.isArray(items) ? items.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0) : 0;
+  const displaySubTotal = subTotal !== undefined && subTotal !== null
+    ? subTotal
+    : (cost_details?.sub_total !== undefined ? cost_details.sub_total : calcSubTotal);
+  const displayDeliveryCharges = deliveryCharges !== undefined && deliveryCharges !== null
+    ? deliveryCharges
+    : (cost_details?.shipping_charges !== undefined ? cost_details.shipping_charges : 0);
+  const displayTax = tax !== undefined && tax !== null
+    ? tax
+    : (cost_details?.tax !== undefined ? cost_details.tax : 0);
+  const displayTotalSavings = totalSavings !== undefined && totalSavings !== null
+    ? totalSavings
+    : (cost_details?.total_savings !== undefined ? cost_details.total_savings : 0);
+  const displayTotalPrice = totalPrice !== undefined && totalPrice !== null
+    ? totalPrice
+    : (cost_details?.total_amount !== undefined ? cost_details.total_amount : (displaySubTotal + displayDeliveryCharges + displayTax));
 
   return (
     <>
@@ -208,36 +271,36 @@ const submitPackedOrder = async () => {
           <div className="details">
             <div className="info-row">
               <span className="label">Order ID:</span>
-              <span className="value">{orderDetails?.order_id || "N/A"}</span>
+              <span className="value">{order_id || "N/A"}</span>
             </div>
             <div className="info-row">
               <span className="label">Customer Name:</span>
-              <span className="value">{orderDetails?.customer_name || "N/A"}</span>
+              <span className="value">{customer_name || "N/A"}</span>
             </div>
             <div className="info-row">
               <span className="label">Total Items:</span>
-              <span className="value">{orderDetails?.total_items || 0}</span>
+              <span className="value">{total_items || (Array.isArray(items) ? items.length : 0)}</span>
             </div>
             <div className="info-row">
               <span className="label">Status:</span>
-              <span className="value">{orderDetails?.status || "N/A"}</span>
+              <span className="value">{status || "N/A"}</span>
             </div>
             <div className="info-row">
               <span className="label">Packed By:</span>
-              <span className="value">{orderDetails?.packed_by || "N/A"}</span>
+              <span className="value">{packed_by || "N/A"}</span>
             </div>
             <div className="info-row">
               <span className="label">Packed At:</span>
-              <span className="value">{orderDetails?.packed_at || "N/A"}</span>
+              <span className="value">{packed_at || "N/A"}</span>
             </div>
             <div className="info-row">
               <span className="label">Created At:</span>
-              <span className="value">{orderDetails?.created_at || "N/A"}</span>
+              <span className="value">{created_at || "N/A"}</span>
             </div>
             <div className="info-row">
               <span className="label">Photo:</span>
-              {orderDetails?.photo ? (
-                <img src={orderDetails.photo} alt="Order Photo" style={{ maxWidth: 100, maxHeight: 100 }} />
+              {orderPhoto ? (
+                <img src={orderPhoto} alt="Order Photo" style={{ maxWidth: 100, maxHeight: 100 }} />
               ) : (
                 <span className="value">N/A</span>
               )}
@@ -249,37 +312,33 @@ const submitPackedOrder = async () => {
           <div className="items-container">
             {Array.isArray(items) && items.length > 0 ? (
               items.map((item, index) => (
-              
-                // <Container style={{marginBottom:'10px'}} key={index}>
-                  <div  key={index} className="product-card">
-                    <img src={item.productImage}  alt="product" height={60} width={55}></img>
-                    <div
-      style={{
-        width: "1px", // Width of the line
-        height: "110px", // Height of the line
-        backgroundColor: "gray", // Line color
-        margin: "0 auto", // Optional: Center the line horizontally
-      }}
-    ></div>
-
-                    <div className="details">
-                      <div className="info-row">
-                        <span className="label">Name:</span>
-                        <span className="value">{item.productName}</span>
-                      </div>
-                      <div className="info-row">
-                        <span className="label">Quantity:</span>
-                        <span className="value">
-                          {item.quantity} {item.unit}
-                        </span>
-                      </div>
-                      <div className="info-row">
-                        <span className="label">Price:</span>
-                        <span className="value">₹{item.price}</span>
-                      </div>
+                <div key={index} className="product-card">
+                  <img src={item.image || item.productImage} alt="product" height={60} width={55} />
+                  <div
+                    style={{
+                      width: "1px",
+                      height: "110px",
+                      backgroundColor: "gray",
+                      margin: "0 auto",
+                    }}
+                  ></div>
+                  <div className="details">
+                    <div className="info-row">
+                      <span className="label">Name:</span>
+                      <span className="value">{item.name || item.productName}</span>
+                    </div>
+                    <div className="info-row">
+                      <span className="label">Quantity:</span>
+                      <span className="value">
+                        {item.quantity} {item.unit || ""}
+                      </span>
+                    </div>
+                    <div className="info-row">
+                      <span className="label">Price:</span>
+                      <span className="value">₹{item.price}</span>
                     </div>
                   </div>
-                // </Container>
+                </div>
               ))
             ) : (
               <div>No items found for this order.</div>
@@ -295,25 +354,25 @@ const submitPackedOrder = async () => {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <span>Sub Total:</span>
-                  <strong>₹{subTotal}</strong>
+                  <strong>₹{displaySubTotal}</strong>
                 </div>
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <span>Shipping Charges:</span>
-                  <strong>₹{deliveryCharges}</strong>
+                  <strong>₹{displayDeliveryCharges}</strong>
                 </div>
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <span>Tax:</span>
-                  <strong>₹{tax}</strong>
+                  <strong>₹{displayTax}</strong>
                 </div>
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <span>Total Savings:</span>
-                  <strong>₹{totalSavings}</strong>
+                  <strong>₹{displayTotalSavings}</strong>
                 </div>
               </SpaceBetween>
               <hr />
@@ -325,7 +384,7 @@ const submitPackedOrder = async () => {
                 }}
               >
                 <span>Total Amount:</span>
-                <span>₹{totalPrice}</span>
+                <span>₹{displayTotalPrice}</span>
               </div>
             </Container>
 
@@ -448,6 +507,23 @@ const submitPackedOrder = async () => {
     </>
   );
 };
+
+// Utility to parse DynamoDB JSON to plain JS
+function parseDynamoDB(item) {
+  if (item === null || typeof item !== 'object') return item;
+  if ('S' in item) return item.S;
+  if ('N' in item) return Number(item.N);
+  if ('BOOL' in item) return item.BOOL;
+  if ('L' in item) return item.L.map(parseDynamoDB);
+  if ('M' in item) {
+    const obj = {};
+    for (const key in item.M) {
+      obj[key] = parseDynamoDB(item.M[key]);
+    }
+    return obj;
+  }
+  return item;
+}
 
 export default StartOrder;
 

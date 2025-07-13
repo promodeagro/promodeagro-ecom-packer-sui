@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Alert, SpaceBetween, Spinner } from '@cloudscape-design/components';
 import { preLoginService } from '../../../Services';
 import config from '../../Config';
+import { useNavigate } from "react-router-dom";
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -40,11 +42,17 @@ const Notifications = () => {
           <Alert
             key={index}
             type="info"
-            header={`${notification.message} (${notification.id})`}
+            header={`${notification.message || "Order Notification"}${notification.order_id ? " (Order: " + notification.order_id + ")" : ""}`}
             dismissible={true}
             onDismiss={() => setNotifications(notifications.filter((_, i) => i !== index))}
+            onClick={() => {
+              if (notification.order_id) {
+                navigate(`/app/PackedOrders/PackedOrderDetails/${notification.order_id}`);
+              }
+            }}
+            style={{ cursor: notification.order_id ? "pointer" : "default" }}
           >
-            {`${notification.date} (${notification.time})`}
+            {`${notification.date || ""} ${notification.time || ""}`}
           </Alert>
         ))
       )}
