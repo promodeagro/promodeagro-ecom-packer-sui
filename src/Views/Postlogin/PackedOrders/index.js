@@ -36,13 +36,13 @@ const PackedOrders = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { image } = location.state || {};
+  const { image, order_id } = location.state || {};
   const [isFlashVisible, setIsFlashVisible] = useState(true);
 
   const flashbarItems = [
     {
       type: "success",
-      content: "Order packed successfully!",
+      content: order_id ? `Order ID: ${order_id} has been packed successfully!` : "Order packed successfully!",
       dismissible: true,
       onDismiss: () => setIsFlashVisible(false),
     },

@@ -114,79 +114,49 @@ const handleRetakePhoto = () => {
   openCamera();
 };
 
-const handleCompleteOrder = () => {
-  navigate("/app/Home/CompleteOrder", { state: { orderDetails, photo } });
-};
-
 // Upload photo to S3 and pack order
 const submitPackedOrder = async () => {
-  if (!photo || !orderDetails?.id) {
+  console.log("submitPackedOrder called");
+  const orderId = orderDetails?.order_id || orderDetails?.id;
+  if (!photo || !orderId) {
     console.error("Missing photo or order ID");
     return;
   }
   const user = JSON.parse(localStorage.getItem("user")); // Retrieve and parse 'user' object from local storage
-  // const jwtToken = user?.accessToken; 
-  const token = user?.accessToken;
+  const packedBy = user?.name || user?.email || "packer";
 
-
-  // setIsUploading(true);
-  // try {
-  //   // Step 1: Get S3 upload URL
-  //   const uploadResponse = await fetch(
-  //     "https://bytud12spg.execute-api.ap-south-1.amazonaws.com/packer/6679942e-ab1e-4de1-8b1b-382a3ed9a044/uploadUrl",
-  //     {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization: `${token}`, // Replace with actual token if required
-  //       },
-  //     }
-  //   );
-  //   console.log(uploadResponse,"response");
-
-  //   if (!uploadResponse.ok) {
-  //     throw new Error("Failed to get upload URL");
-  //   }
-
-  //   const { uploadUrl } = await uploadResponse.json();
-  //   console.log("S3 Upload URL:", uploadUrl);
-
-  //   // Step 2: Upload image to S3
-  //   const imageBlob = await fetch(photo).then((res) => res.blob());
-  //   const s3UploadResponse = await fetch(uploadUrl, {
-  //     method: "PUT",
-  //     headers: { "Content-Type": "image/jpeg" },
-  //     body: imageBlob,
-  //   });
-
-  //   if (!s3UploadResponse.ok) {
-  //     throw new Error("Failed to upload image to S3");
-  //   }
-
-  //   console.log("Image uploaded successfully to S3");
-
-    // Step 3: Pack the order
+  try {
     const packOrderResponse = await fetch(
-      `https://bytud12spg.execute-api.ap-south-1.amazonaws.com/packer/order/${orderDetails.id}`,
+      "http://localhost:3000/dev/orders/complete",
       {
-        method: "PATCH",
-        body: JSON.stringify({ action: "pack", image: "https://example.com/image.jpg" }),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          order_id: orderId,
+          photo: photo,
+          packed_by: packedBy
+        }),
       }
     );
-
+    console.log("API call made, response status:", packOrderResponse.status);
     if (!packOrderResponse.ok) {
       const errorData = await packOrderResponse.json();
       throw new Error(errorData.message || "Failed to pack order");
     }
-
     const packOrderData = await packOrderResponse.json();
     console.log("Order Packed Successfully:", packOrderData);
-
     setIsModalVisible(true);
     setTimeout(() => {
       setIsModalVisible(false);
-      navigate("/app/Home", { state: { image: photo } });
+      console.log("Navigating to /app/PackedOrders");
+      navigate("/app/PackedOrders", { state: { image: photo, order_id: orderId } });
     }, 3000);
+  } catch (error) {
+    console.error("Error in submitting packed order:", error.message);
   }
+};
   //  catch (error) {
   //   console.error("Error in submitting packed order:", error.message);
   // }
@@ -426,6 +396,7 @@ const submitPackedOrder = async () => {
               Take Photo
             </Button>
           </Box>
+          {/* Remove or keep disabled the Complete Pack Order button in camera overlay */}
           <Box
             textAlign="center"
             position="absolute"
@@ -451,7 +422,7 @@ const submitPackedOrder = async () => {
             style={{ width: "100%", maxWidth: 400, height: "auto", objectFit: "cover", marginBottom: 20 }}
           />
           <div>
-            <Button variant="primary" onClick={handleCompleteOrder} style={{ marginRight: 10 }}>
+            <Button variant="primary" onClick={submitPackedOrder} style={{ marginRight: 10 }}>
               Complete Order
             </Button>
             <Button variant="normal" onClick={handleRetakePhoto}>
@@ -461,49 +432,19 @@ const submitPackedOrder = async () => {
         </div>
       )}
 
-      {photo && (
-        <div style={{ position: "relative" }}>
-          <img
-            src={photo}
-            alt="Preview"
-            style={{ width: "100%", height: "80vh", objectFit: "cover" }}
-          />
-          <div style={{ textAlign: "center" }}>
-            {/* Show spinner if uploading */}
-            {isUploading ? (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  zIndex: 1,
-                }}
-              >
-                <Spinner size="large" />
-              </div> // Show spinner when uploading
-            ) : (
-              <Button variant="primary" onClick={submitPackedOrder}>
-                Complete Pack Order
-              </Button>
-            )}
-          </div>
+      {/* Modal - Display success message */}
 
-          {/* Modal - Display success message */}
-
-          <Modal
-            visible={isModalVisible}
-            size="small"
-            onDismiss={() => setIsModalVisible(false)}
-            closeAriaLabel="Close modal"
-          >
-            <div style={{ color: "green", textAlign: "center" }}>
-              <Icon name="status-positive" size="large" />
-              <h4>Successfully</h4>
-            </div>
-          </Modal>
+      <Modal
+        visible={isModalVisible}
+        size="small"
+        onDismiss={() => setIsModalVisible(false)}
+        closeAriaLabel="Close modal"
+      >
+        <div style={{ color: "green", textAlign: "center" }}>
+          <Icon name="status-positive" size="large" />
+          <h4>Successfully</h4>
         </div>
-      )}
+      </Modal>
     </>
   );
 };
